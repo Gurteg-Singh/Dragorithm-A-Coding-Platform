@@ -1,4 +1,4 @@
-const registervalidation = require("../utils/authvalidation");
+const registervalidation = require("../utils/userUtils");
 const bcrypt = require('bcrypt');
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
@@ -6,12 +6,13 @@ const jwt = require("jsonwebtoken");
 async function register(req,res){
     try{
         registervalidation(req.body);
-        const {firstName,lastName="",email,password} = req.body;
+        const {firstName,email,password} = req.body;
         const hashed = await bcrypt.hash(password, 10);
 
-        const newuser = await User.create({firstName,lastName,email,password : hashed});
+        req.body.role = "user";
+        const newuser = await User.create(req.body);
 
-        const token = jwt.sign({_id:newuser._id,email : email},process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({_id:newuser._id,email : email,role:'user'},process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
         res.cookie('token',token,{maxAge: 60*60*1000});
         res.status(201).send("User Registered Successfully");
     }catch(err){
@@ -23,7 +24,7 @@ async function login(req,res){
     try{
         const{email,password} = req.body;
         if(!email || !password){
-            throw new Enumeratorrror("ERROR : Invalid credentials");
+            throw new Error("ERROR : Invalid credentials");
         }
 
         const user = await User.findOne({email : email});
@@ -36,11 +37,15 @@ async function login(req,res){
             throw new Error("ERROR : Invalid credentials");
         }
 
-        const token = jwt.sign({_id:user._id,email : email},process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({_id:user._id,email : email,role:user.role},process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
         res.cookie('token',token,{maxAge: 60*60*1000});
         res.status(201).send("Login Successful");
 
     }catch(err){
         res.status(400).send("ERROR" + err.message);
     }
+}
+
+function logout(req,res){
+    
 }
