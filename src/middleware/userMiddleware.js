@@ -11,8 +11,8 @@ async function userVerification(req,res,next){
 
         const payload = jwt.verify(token,process.env.JWT_TOKEN_KEY);
 
-        const _id = payload.id;
-        if(!id){
+        const _id = payload._id;
+        if(!_id){
             throw new Error("ERROR : Id not in database");
         }
 
@@ -34,3 +34,20 @@ async function userVerification(req,res,next){
         res.status(401).send("Error: "+ err.message)
     }
 }
+
+async function adminVerification(req,res,next){
+    try{
+        const payload = req.extractedPayload;
+        const role = payload.role;
+
+        if(role!=="admin"){
+            throw new Error("ERROR : You are not an admin");
+        }
+
+        next();
+    }catch(err){
+        res.send("ERROR : " + err.message);
+    }
+}
+
+module.exports = {userVerification,adminVerification};

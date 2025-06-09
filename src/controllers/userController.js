@@ -9,6 +9,7 @@ async function register(req,res){
         registervalidation(req.body);
         const {firstName,email,password} = req.body;
         const hashed = await bcrypt.hash(password, 10);
+        req.body.password = hashed;
 
         req.body.role = "user";
         const newuser = await User.create(req.body);
@@ -23,7 +24,7 @@ async function register(req,res){
 
 async function login(req,res){
     try{
-        const{email,password} = req.body;
+        const {email,password} = req.body;
         if(!email || !password){
             throw new Error("ERROR : Invalid credentials");
         }
@@ -65,3 +66,20 @@ async function logout(req,res){
         res.status(501).send("ERROR" + err.message);
     }
 }
+
+async function adminRegister(req,res){
+    try{
+        registervalidation(req.body);
+        const {firstName,email,password} = req.body;
+        const hashed = await bcrypt.hash(password, 10);
+        req.body.password = hashed;
+
+        req.body.role = "admin";
+        const newuser = await User.create(req.body);
+
+        res.status(201).send("New Admin Registered Successfully");
+    }catch(err){
+        res.status(400).send("ERROR : " + err.message);
+    }
+}
+module.exports = {register,login,logout,adminRegister};
