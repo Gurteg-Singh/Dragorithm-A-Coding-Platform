@@ -2,6 +2,7 @@ const registervalidation = require("../utils/userUtils");
 const bcrypt = require('bcrypt');
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const redisClient = require("../config/redis");
 
 async function register(req,res){
     try{
@@ -46,6 +47,21 @@ async function login(req,res){
     }
 }
 
-function logout(req,res){
-    
+async function logout(req,res){
+    try{
+        const token = req.cookies.token;
+        const user = req.result;
+        const payload = req.extractedPayload;
+        //ADDING TOKEN TO REDIS BLOCKLIST;
+
+        await redisClient.set(`token:${token}`,"Blocked");
+        await redisClient.expireAt(`token:${token}`,payload.exp);
+
+        //SENDING AN INVALID TOKEN THAT EXPIRES IMMEDIATELY
+
+        res.cookie("token",null,{expires : new Date(Date.now(0))});
+        res.send("Logged Out Successfully");
+    }catch(err){
+        res.status(501).send("ERROR" + err.message);
+    }
 }
