@@ -4,6 +4,7 @@ const redisClient = require("./config/redis");
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const authRouter = require("./routes/userRoute");
+const problemRouter = require("./routes/problemRoute");
 
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(cookieParser());
 
 
 app.use("/user",authRouter);
+app.use("/problem",problemRouter);
 
 async function startServer(){
     await Promise.all([main(),redisClient.connect()]);

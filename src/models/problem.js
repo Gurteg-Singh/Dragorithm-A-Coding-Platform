@@ -18,7 +18,7 @@ const problemSchema = mongoose.Schema({
         {
         type:String,
         required:true,
-        enum:["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming"]
+        enum:["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"]
         }
     ],
     visibleTestCases:[
