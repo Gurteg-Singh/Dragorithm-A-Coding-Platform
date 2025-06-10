@@ -5,7 +5,7 @@ const problemSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    Description:{
+    description:{
         type:String,
         required:true
     },
@@ -67,7 +67,8 @@ const problemSchema = mongoose.Schema({
             language:{
                 type:String,
                 required:true,
-                enum:["Java","C++","Javascript"]
+                lowercase:true,
+                enum:["java","c++","javascript"]
             },
             codeSolution:{
                 type:String,
@@ -82,6 +83,6 @@ const problemSchema = mongoose.Schema({
     }
 },{timestamps : true});
 
-const Problem  = mongoose.model("problme",problemSchema);
+const Problem  = mongoose.model("problem",problemSchema);
 
 module.exports = Problem;
