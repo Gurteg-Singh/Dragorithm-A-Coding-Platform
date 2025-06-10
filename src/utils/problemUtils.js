@@ -21,6 +21,15 @@ function findLanguageId(lang){
     return map[l];
 }
 
+async function fetchData(options) {
+        try {
+            const response = await axios.request(options);
+            return response.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
 async function submitBatch(submission){
     const options = {
     method: 'POST',
@@ -38,16 +47,7 @@ async function submitBatch(submission){
     }
     };
 
-    async function fetchData() {
-        try {
-            const response = await axios.request(options);
-            return response.data;
-        } catch (error) {
-            return error;
-        }
-    }
-
-    return await fetchData();
+    return await fetchData(options);
 }
 
 async function waiting() {
@@ -73,17 +73,8 @@ async function submitToken(tokenString){
     }
     };
 
-    async function fetchData() {
-        try {
-            const response = await axios.request(options);
-            return response.data;
-        } catch (error) {
-            return error;
-        }
-    }
-
     while(true){
-        const result =  await fetchData();
+        const result =  await fetchData(options);
         const IsResultObtained =  result.submissions.every((r)=>r.status_id>2);
         if(IsResultObtained)
             return result.submissions;
