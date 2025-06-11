@@ -5,6 +5,7 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const authRouter = require("./routes/userRoute");
 const problemRouter = require("./routes/problemRoute");
+const submissionRouter = require("./routes/codeSubmissionRoute");
 
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cookieParser());
 
 app.use("/user",authRouter);
 app.use("/problem",problemRouter);
+app.use("/submission",submissionRouter);
 
 async function startServer(){
     await Promise.all([main(),redisClient.connect()]);

@@ -124,7 +124,7 @@ async function getProblem(req,res){
             throw new Error("ERROR : Id is missing");
         }
 
-        const dsaproblem = await Problem.findById(id).select('_id title description difficultyLevel tags visibleTestCases code');
+        const dsaproblem = await Problem.findById(id).select('_id title description difficultyLevel tags visibleTestCases code solution');
         if(!dsaproblem){
             throw new Error("ERROR : DSA problem is missing");
         }
