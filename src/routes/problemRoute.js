@@ -10,8 +10,8 @@ problemRouter.patch("/update/:id",userVerification,adminVerification,updateProbl
 problemRouter.delete("/delete/:id",userVerification,adminVerification,deleteProblem);
 
 
-problemRouter.get("/getProblem/:id",getProblem);
-problemRouter.get("/getAllProblems",getAllProblems);
+problemRouter.get("/getProblem/:id",userVerification,getProblem);
+problemRouter.get("/getAllProblems",userVerification,getAllProblems);
 // problemRouter.get("/solvedProblems",solvedProblems);
 
 module.exports = problemRouter;
