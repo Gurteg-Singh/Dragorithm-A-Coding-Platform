@@ -1,5 +1,6 @@
 const Submission = require("../models/codeSubmissions");
 const Problem = require("../models/problem");
+const User = require("../models/user");
 const { findLanguageId,submitBatch,submitToken } = require("../utils/problemUtils");
 
 async function submitCode(req,res){
@@ -25,8 +26,6 @@ async function submitCode(req,res){
             status : "Pending",
             testCasesTotal : dsaProblem.hiddenTestCases.length,
         })
-
-        console.log(newSubmission);
 
         const langId = findLanguageId(language);
 
@@ -77,8 +76,14 @@ async function submitCode(req,res){
         //Upadting and Saving the Submission
         newSubmission.save();
 
-
-        res.send(newSubmission);
+        if(status === "Accepted"){
+            if(!req.result.problemSolved.includes(problemId)){
+                req.result.problemSolved.push(problemId);
+                await req.result.save();
+            }
+        }
+        res.status(201).send(newSubmission);
+        
     }catch(err){
         res.send("Error : " + err.message);
     }

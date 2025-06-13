@@ -32,8 +32,8 @@ const userSchema = new mongoose.Schema({
         enum:['user','admin'],
         default: 'user'
     },
-    problemsolved :{
-        type : [String] 
+    problemSolved :{
+        type : [mongoose.Schema.Types.ObjectId] 
     }
 },{timestamps:true});
 
