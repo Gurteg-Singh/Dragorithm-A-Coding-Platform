@@ -125,14 +125,11 @@ async function runCode(req,res){
         const tokenString = codeTokens.join(',');
         const result = await submitToken(tokenString);
 
-        
-
-        
         res.status(200).send(result);
         
     }catch(err){
-        res.send("Error : " + err.message);
+        res.status(500).send("Error : " + err.message);
     }
 }
 
-module.exports = {submitCode}
+module.exports = {submitCode,runCode}
