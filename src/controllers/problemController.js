@@ -150,4 +150,19 @@ async function getAllProblems(req,res){
     }
 }
 
-module.exports = {createProblem,updateProblem,deleteProblem,getProblem,getAllProblems}
+async function getAllProblemsSolvedByUser(req,res){
+    try{
+        const userId = req.result._id;
+
+        const user =  await User.findById(userId).populate({
+            path:"problemSolved",
+            select:"_id title difficulty tags"
+        });
+      
+        res.status(200).send(user.problemSolved);
+    }catch(err){
+        res.status(404).send("ERROR : " + err.message);
+    }
+}
+
+module.exports = {createProblem,updateProblem,deleteProblem,getProblem,getAllProblems,getAllProblemsSolvedByUser}

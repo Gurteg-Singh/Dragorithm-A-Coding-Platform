@@ -1,6 +1,6 @@
 const express= require("express");
 const {userVerification,adminVerification} = require("../middleware/userMiddleware");
-const {createProblem,updateProblem,deleteProblem,getProblem,getAllProblems} = require("../controllers/problemController");
+const {createProblem,updateProblem,deleteProblem,getProblem,getAllProblems,getAllProblemsSolvedByUser} = require("../controllers/problemController");
 
 
 const problemRouter = express.Router();
@@ -12,6 +12,7 @@ problemRouter.delete("/delete/:id",userVerification,adminVerification,deleteProb
 
 problemRouter.get("/getProblem/:id",userVerification,getProblem);
 problemRouter.get("/getAllProblems",userVerification,getAllProblems);
+problemRouter.get("/getAllProblemsSolvedByUser",userVerification,getAllProblemsSolvedByUser);
 // problemRouter.get("/solvedProblems",solvedProblems);
 
 module.exports = problemRouter;
