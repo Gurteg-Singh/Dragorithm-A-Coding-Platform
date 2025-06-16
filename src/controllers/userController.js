@@ -82,4 +82,18 @@ async function adminRegister(req,res){
         res.status(400).send("ERROR : " + err.message);
     }
 }
-module.exports = {register,login,logout,adminRegister};
+
+async function deleteAccount(req,res){
+    try{
+        const id = req.result._id;
+        await User.findByIdAndDelete(id);
+
+        //All submissions of user will be deleted from Submission schema via post hook of mongoose. Check the User Schema.
+
+        res.status(200).send("User deleted Sucessfully");
+    }catch(err){
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+module.exports = {register,login,logout,adminRegister,deleteAccount};
