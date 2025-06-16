@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const submissionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'user',
     required: true
   },
   problemId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Problem',
+    ref: 'problem',
     required: true
   },
   code: {

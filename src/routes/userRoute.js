@@ -8,7 +8,7 @@ authRouter.post("/register",register);
 authRouter.post("/login",login);
 authRouter.post("/logout",userVerification,logout);
 authRouter.post("/admin/register",userVerification,adminVerification,adminRegister);
-authRouter.post("/delete/account",userVerification,deleteAccount);
+authRouter.delete("/delete/account",userVerification,deleteAccount);
 // authRouter.get("/myprofile",myprofile);
 
 module.exports = authRouter;

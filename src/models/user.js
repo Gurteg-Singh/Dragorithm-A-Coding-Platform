@@ -33,14 +33,15 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
     problemSolved :{
-        type : [mongoose.Schema.Types.ObjectId] 
+        type : [mongoose.Schema.Types.ObjectId],
+        ref : 'problem'
     }
 },{timestamps:true});
 
 
-userSchema.post('findOneAndDelete', async function (userInfo) {
+userSchema.post('findByIdAndDelete', async function (userInfo) {
     if (userInfo) {
-      await mongoose.model('Submission').deleteMany({ userId: userInfo._id });
+      await mongoose.model('submission').deleteMany({ userId: userInfo._id });
     }
 });
 

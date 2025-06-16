@@ -1,6 +1,7 @@
 const {validateProblemData,findLanguageId,submitBatch,submitToken,getErrorMessage} = require("../utils/problemUtils");
-const Problem = require("../models/problem");
 const Submission = require("../models/codeSubmissions");
+const User = require("../models/user");  
+const Problem = require("../models/problem"); 
 
 async function createProblem(req,res){
     try{
@@ -157,7 +158,7 @@ async function getAllProblemsSolvedByUser(req,res){
 
         const user =  await User.findById(userId).populate({
             path:"problemSolved",
-            select:"_id title difficulty tags"
+            select:"_id title difficultyLevel tags"
         });
       
         res.status(200).send(user.problemSolved);
@@ -166,13 +167,13 @@ async function getAllProblemsSolvedByUser(req,res){
     }
 }
 
-async function soltionsOfProblem(req,res) {
+async function solutionsOfProblem(req,res) {
     try{
         const userId = req.result._id;
-        const problemId = req.body.params;
+        const problemId = req.params.id;
 
         const solutions = await Submission.find({userId : userId , problemId : problemId});
-
+        
         if(solutions.length === 0){
             return res.status(200).send("No submissions made yet.");
         }
@@ -184,4 +185,4 @@ async function soltionsOfProblem(req,res) {
     }
 }
 
-module.exports = {createProblem,updateProblem,deleteProblem,getProblem,getAllProblems,getAllProblemsSolvedByUser,soltionsOfProblem}
+module.exports = {createProblem,updateProblem,deleteProblem,getProblem,getAllProblems,getAllProblemsSolvedByUser,solutionsOfProblem}
