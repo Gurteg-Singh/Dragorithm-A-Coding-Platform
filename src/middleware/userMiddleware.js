@@ -6,19 +6,19 @@ async function userVerification(req,res,next){
     try{
         const token = req.cookies.token;
         if(!token){
-            throw new Error("ERROR : Token not found");
+            throw new Error("Token not found");
         }
 
         const payload = jwt.verify(token,process.env.JWT_TOKEN_KEY);
 
         const _id = payload._id;
         if(!_id){
-            throw new Error("ERROR : Id not in database");
+            throw new Error("Id not in database");
         }
 
         const user = await User.findById(_id);
         if(!user){
-            throw new Error("ERROR : User not in database");
+            throw new Error("User not in database");
         }
 
         //Checking Token in Redis Blocklist or not 
@@ -31,7 +31,7 @@ async function userVerification(req,res,next){
         req.extractedPayload = payload;
         next();
     }catch(err){
-        res.status(401).send("Error: "+ err.message)
+        res.status(401).send("Error : "+ err.message)
     }
 }
 

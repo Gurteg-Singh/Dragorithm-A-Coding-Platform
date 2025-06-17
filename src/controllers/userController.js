@@ -86,7 +86,7 @@ async function adminRegister(req,res){
 async function deleteAccount(req,res){
     try{
         const id = req.result._id;
-        await User.findByIdAndDelete(id);
+        await User.findOneAndDelete(id);
 
         //All submissions of user will be deleted from Submission schema via post hook of mongoose. Check the User Schema.
 
