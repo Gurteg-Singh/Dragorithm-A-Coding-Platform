@@ -16,7 +16,17 @@ async function register(req,res){
 
         const token = jwt.sign({_id:newuser._id,email : email,role:'user'},process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
         res.cookie('token',token,{maxAge: 60*60*1000});
-        res.status(201).send("User Registered Successfully");
+
+        const reply = {
+            firstName : newuser.firstName,
+            email : newuser.email,
+            id : newuser._id
+        }
+
+        res.status(201).json({
+            user : reply,
+            message : "User registered successfully"
+        })
     }catch(err){
         res.status(400).send("ERROR" + err.message);
     }
@@ -41,7 +51,17 @@ async function login(req,res){
 
         const token = jwt.sign({_id:user._id,email : email,role:user.role},process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
         res.cookie('token',token,{maxAge: 60*60*1000});
-        res.status(201).send("Login Successful");
+        
+        const reply = {
+            firstName : newuser.firstName,
+            email : newuser.email,
+            id : newuser._id
+        }
+
+        res.status(201).json({
+            user : reply,
+            message : "User registered successfully"
+        })
 
     }catch(err){
         res.status(400).send("ERROR" + err.message);
