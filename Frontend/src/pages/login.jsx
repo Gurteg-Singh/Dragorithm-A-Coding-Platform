@@ -2,7 +2,7 @@ import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-export default function SignUp(){
+export default function Login(){
     const signUpSchema = z.object({
         firstName: z.string().min(1, "First name is required"),
         lastName: z.string().min(1, "Last name is required"),
@@ -28,16 +28,6 @@ export default function SignUp(){
                     <p>Dragorithm</p>
                 </div>
                 <div>
-                    <label className="font-bold text-2xl" htmlFor="firstName">First Name : </label>
-                    <input className="border-2 border-amber-400 m-4" {...register('firstName')} type="text" placeholder="Enter your first name"></input>
-                    {errors.firstName ? <span>{errors.firstName.message}</span> : null}
-                </div>
-                <div>
-                    <label className="font-bold text-2xl" htmlFor="lastName">Last Name : </label>
-                    <input className="border-2 border-amber-400 m-4" {...register('lastName')} type="text" placeholder="Enter your last name"></input>
-                    {errors.lastName ? <span>{errors.lastName.message}</span> : null}
-                </div>
-                <div>
                     <label className="font-bold text-2xl" htmlFor="email">E-mail : </label>
                     <input className="border-2 border-amber-400 m-4" {...register('email')} type="email" placeholder="@gmail.com"></input>
                     {errors.email ? <span>{errors.email.message}</span> : null}
@@ -48,10 +38,9 @@ export default function SignUp(){
                     {errors.password ? <span>{errors.password.message}</span> : null}
                 </div>
                 <div>
-                    <button className="bg-blue-700 text-white">Sign Up</button>
+                    <button className="bg-blue-700 text-white">Login</button>
                 </div>
             </form>
         </div>
     )
 }
-
