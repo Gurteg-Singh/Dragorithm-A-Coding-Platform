@@ -1,10 +1,15 @@
 import SignUp from "./pages/signUp";
+import Login from "./pages/login";
+import Home from "./pages/Home";
+import{Route,Routes} from "react-router";
 
 function App() {
     return(
-      <div className="w-full h-screen flex justify-center items-center">
-        <SignUp/>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/signUp" element={<SignUp/>}/>
+        <Route path="/login" element={<Login/>}/>
+      </Routes>
     )
 }
 

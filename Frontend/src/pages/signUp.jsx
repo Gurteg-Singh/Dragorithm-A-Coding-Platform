@@ -22,7 +22,7 @@ export default function SignUp(){
 
     }
     return(
-        <div className="border-2 border-blue-600">
+        <div className="w-full h-screen flex justify-center items-center">
             <form onSubmit={handleSubmit(submitData)} className="flex flex-col items-center">
                 <div>
                     <p>Dragorithm</p>
