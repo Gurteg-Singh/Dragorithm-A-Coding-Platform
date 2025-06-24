@@ -116,4 +116,21 @@ async function deleteAccount(req,res){
     }
 }
 
-module.exports = {register,login,logout,adminRegister,deleteAccount};
+async function check(req,res){
+    try{
+        const reply = {
+            firstName : newuser.firstName,
+            email : newuser.email,
+            id : newuser._id
+        }
+
+        res.status(201).json({
+            user : reply,
+            message : "User registered successfully"
+        })
+    }catch(err){
+        res.status(500).send("ERROR : " + err.message);
+    }
+}
+
+module.exports = {register,login,logout,adminRegister,deleteAccount,check};
