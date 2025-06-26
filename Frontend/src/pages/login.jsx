@@ -2,6 +2,7 @@ import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { Link } from "react-router";
+import { loginUser } from "../redux/userSlices/authSlice";
 
 export default function Login() {
     const loginSchema = z.object({
@@ -12,10 +13,18 @@ export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm({ 
         resolver: zodResolver(loginSchema) 
     });
-
+    const dispatch = useDispatch();
     function submitData(data) {
-        console.log(data);
+        dispatch(loginUser(data));
     }
+
+    const {isAuthenticated,loading,error} = useSelector((state)=>state.auth);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        if(isAuthenticated){
+            navigate("/");
+        }
+    },[isAuthenticated,navigate]);
 
     return (
         <div className="min-h-screen bg-white flex flex-col lg:flex-row">

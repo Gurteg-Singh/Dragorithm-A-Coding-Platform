@@ -1,7 +1,7 @@
 import {createAsyncThunk,createSlice} from "@reduxjs/toolkit";
 import axiosClient from "../../utils/axiosClient";
 
-const registerUser = createAsyncThunk(
+export const registerUser = createAsyncThunk(
     'auth/register',
     async(userData,thunkAPI)=>{
         try{
@@ -14,7 +14,7 @@ const registerUser = createAsyncThunk(
     }
 )
 
-const loginUser = createAsyncThunk(
+export const loginUser = createAsyncThunk(
     'auth/login',
     async(userData,thunkAPI)=>{
         try{
@@ -27,7 +27,7 @@ const loginUser = createAsyncThunk(
     }
 )
 
-const checkUser = createAsyncThunk(
+export const checkUser = createAsyncThunk(
     'auth/check',
     async(_,thunkAPI)=>{
         try{

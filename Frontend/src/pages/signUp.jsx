@@ -1,6 +1,10 @@
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {useSelector,useDispatch, registerUser} from "../redux/userSlices/authSlice";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { registerUser } from "../redux/userSlices/authSlice";
 
 export default function SignUp(){
     const signUpSchema = z.object({
@@ -17,10 +21,19 @@ export default function SignUp(){
     });
 
     const {register ,handleSubmit,formState : {errors}} = useForm({resolver: zodResolver(signUpSchema)});
-
+    const dispatch = useDispatch();
     function submitData(data){
-
+        dispatch(registerUser(data));
     }
+
+    const {isAuthenticated,loading,error} = useSelector((state)=>state.auth);
+    const navigate = useNavigate();
+    useEffect(()=>{
+        if(isAuthenticated){
+            navigate("/");
+        }
+    },[isAuthenticated,navigate]);
+
     return(
         <div className="min-h-screen bg-white flex flex-col lg:flex-row">
             {/* Left Side - Branding */}
