@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { loginUser } from "../redux/userSlices/authSlice";
 import {useSelector,useDispatch} from "react-redux";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export default function Login() {
     const loginSchema = z.object({
@@ -27,6 +28,10 @@ export default function Login() {
             navigate("/");
         }
     },[isAuthenticated,navigate]);
+
+    if (loading) {
+        return <div className="h-screen flex items-center justify-center">Loading...</div>;
+    }
 
     return (
         <div className="min-h-screen bg-white flex flex-col lg:flex-row">

@@ -119,9 +119,9 @@ async function deleteAccount(req,res){
 async function check(req,res){
     try{
         const reply = {
-            firstName : newuser.firstName,
-            email : newuser.email,
-            id : newuser._id
+            firstName : req.result.firstName,
+            email : req.result.email,
+            id : req.result._id
         }
 
         res.status(201).json({

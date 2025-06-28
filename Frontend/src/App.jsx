@@ -1,6 +1,6 @@
 import SignUp from "./pages/signUp";
 import Login from "./pages/login";
-import Home from "./pages/Home";
+import Home from "./pages/home";
 import{Navigate, Route,Routes} from "react-router";
 import { useEffect } from "react";
 import {useSelector,useDispatch} from "react-redux";
