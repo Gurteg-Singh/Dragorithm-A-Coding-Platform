@@ -1,7 +1,17 @@
 export default function Home(){
     return(
         <div>
-            This is my Home Page
+            <nav>
+                {/* navigation buttond */}
+            </nav>
+
+            <div>
+                {/* Filters */}
+            </div>
+
+            <div>
+
+            </div>
         </div>
     )
 }
