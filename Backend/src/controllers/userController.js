@@ -20,7 +20,8 @@ async function register(req,res){
         const reply = {
             firstName : newuser.firstName,
             email : newuser.email,
-            id : newuser._id
+            id : newuser._id,
+            role : newuser.role,
         }
 
         res.status(201).json({
@@ -53,9 +54,10 @@ async function login(req,res){
         res.cookie('token',token,{maxAge: 60*60*1000});
         
         const reply = {
-            firstName : newuser.firstName,
-            email : newuser.email,
-            id : newuser._id
+            firstName : user.firstName,
+            email : user.email,
+            id : user._id,
+            role : user.role
         }
 
         res.status(201).json({
@@ -121,7 +123,8 @@ async function check(req,res){
         const reply = {
             firstName : req.result.firstName,
             email : req.result.email,
-            id : req.result._id
+            id : req.result._id,
+            role : req.result.role
         }
 
         res.status(201).json({
