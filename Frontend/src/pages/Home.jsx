@@ -13,6 +13,14 @@ export default function Home(){
         tag : 'all'
     });
 
+    const filteredProblems = problems.filter((val)=>{
+        const difficultyLevelCheck = filters.difficulty === 'all' || filters.difficulty === val.difficultyLevel;
+        const tagsCheck = filters.tag === 'all' || val.tags.includes(filters.tag);
+        const statusCheck = filters.status ==='all' || solvedProblems.some((data)=> data._id === val._id);
+
+        return difficultyLevelCheck && tagsCheck && statusCheck;
+    })
+
     useEffect(()=>{
         async function fetchProblems(){
             try{
@@ -35,19 +43,19 @@ export default function Home(){
             fetchSolvedProblems();
         }
     },[]);
-    // console.log("ALL PROBLEMS : ")
-    // console.log(problems);
-    // console.log("\n");
+    console.log("ALL PROBLEMS : ")
+    console.log(problems);
+    console.log("\n");
 
-    // console.log("SOLVED PROBLEMS : ")
-    // console.log(solvedProblems);
+    console.log("FILTERED PROBLEMS : ")
+    console.log(filteredProblems);
 
     function CreateProblem({data,className}){
         return(
             <div className={className}>
                 <div>{data?.title}</div>
                 <div>{data?.difficultyLevel}</div>
-                <div>{data?.tags.join(",")}</div>
+                <div>{data?.tags?.join(",")}</div>
             </div>
         )
     }
@@ -66,14 +74,14 @@ export default function Home(){
             <div className="w-[80%] h-9 flex items-center justify-center">
                 <div className="flex items-center mr-3">
                     <label htmlFor="statusFilter">Problem Status : </label>
-                    <select value="All Problems" id="statusFilter">
+                    <select id="statusFilter" onChange={(e)=> setfilters(prev => ({ ...prev, status: e.target.value }))}>
                         <option value ="all">All Problems</option>
                         <option value ="solved">Solved Problems</option>
                     </select>
                 </div>
                 <div className="flex items-center mr-3">
                     <label htmlFor="difficultyLevelFilter">Problem Difficulty Level : </label>
-                    <select value="All Problems" id="difficultyLevelFilter">
+                    <select id="difficultyLevelFilter" onChange={(e)=> setfilters(prev => ({ ...prev, difficulty: e.target.value }))}>
                         <option value ="all">All Problems</option>
                         <option value ="easy">Easy</option>
                         <option value ="medium">Medium</option>
@@ -82,7 +90,7 @@ export default function Home(){
                 </div>
                 <div className="flex items-center mr-3">
                     <label htmlFor="tagFilter">Problem Tag : </label>
-                    <select value="All Problems">
+                    <select id="tagFilter" onChange={(e)=> setfilters(prev => ({ ...prev, tag: e.target.value }))}>
                         <option value ="all">All Problems</option>
                         <option value ="Arrays">Arrays</option>
                         <option value ="Linked List">Linked List</option>
@@ -100,7 +108,7 @@ export default function Home(){
             {/*PROBLEMS*/}
             <div className="w-[80%] flex flex-col">
                 {
-                    problems.map((val)=>{
+                    filteredProblems.map((val)=>{
                         return(
                             <div key={val?._id}>
                                 <CreateProblem data={val} className="w-full flex h-6 items-center justify-around"/>
