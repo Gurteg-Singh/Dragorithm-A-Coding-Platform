@@ -5,6 +5,7 @@ import {useSelector,useDispatch} from "react-redux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { registerUser } from "../redux/userSlices/authSlice";
+import { Link } from "react-router";
 
 export default function SignUp(){
     const signUpSchema = z.object({
@@ -201,9 +202,9 @@ export default function SignUp(){
                         <div className="text-center mt-5">
                             <p className="text-gray-600 text-sm">
                                 Already have an account?{" "}
-                                <a href="#" className="text-blue-600 font-medium hover:underline">
-                                    Sign in
-                                </a>
+                                <Link to="/login" className="text-blue-600 font-medium hover:underline">
+                                    Log in
+                                </Link>
                             </p>
                         </div>
                     </form>
