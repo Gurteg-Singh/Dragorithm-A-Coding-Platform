@@ -35,39 +35,55 @@ export default function Home(){
             fetchSolvedProblems();
         }
     },[]);
-    console.log("ALL PROBLEMS : ")
-    console.log(problems);
-    console.log("\n");
+    // console.log("ALL PROBLEMS : ")
+    // console.log(problems);
+    // console.log("\n");
 
-    console.log("SOLVED PROBLEMS : ")
-    console.log(solvedProblems);
+    // console.log("SOLVED PROBLEMS : ")
+    // console.log(solvedProblems);
+
+    function CreateProblem({data,className}){
+        return(
+            <div className={className}>
+                <div>{data?.title}</div>
+                <div>{data?.difficultyLevel}</div>
+                <div>{data?.tags.join(",")}</div>
+            </div>
+        )
+    }
 
     return(
-        <div className="w-full h-screen flex flex-col">
+        <div className="w-full h-screen flex flex-col items-center">
             <nav className="w-full h-8 bg-yellow-500 flex items-center">
                 <button className="text-black text-3xl">Log Out</button>
             </nav>
 
+            <div className="w-[80%] h-60 bg-blue-300">
+                PROGRESS AND LOGO SECTION 
+            </div>
+
             {/*FILTERS*/}
-            <div className="w-full h-9 flex items-center">
-                <div className="flex items-center">
+            <div className="w-[80%] h-9 flex items-center justify-center">
+                <div className="flex items-center mr-3">
                     <label htmlFor="statusFilter">Problem Status : </label>
                     <select value="All Problems" id="statusFilter">
                         <option value ="all">All Problems</option>
                         <option value ="solved">Solved Problems</option>
                     </select>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center mr-3">
                     <label htmlFor="difficultyLevelFilter">Problem Difficulty Level : </label>
                     <select value="All Problems" id="difficultyLevelFilter">
+                        <option value ="all">All Problems</option>
                         <option value ="easy">Easy</option>
                         <option value ="medium">Medium</option>
                         <option value ="hard">Hard</option>
                     </select>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center mr-3">
                     <label htmlFor="tagFilter">Problem Tag : </label>
                     <select value="All Problems">
+                        <option value ="all">All Problems</option>
                         <option value ="Arrays">Arrays</option>
                         <option value ="Linked List">Linked List</option>
                         <option value ="Graphs">Graphs</option>
@@ -80,9 +96,18 @@ export default function Home(){
                     </select>
                 </div>
             </div>
-
-            <div>
-                THIS IS HOME PAGE
+            
+            {/*PROBLEMS*/}
+            <div className="w-[80%] flex flex-col">
+                {
+                    problems.map((val)=>{
+                        return(
+                            <div key={val?._id}>
+                                <CreateProblem data={val} className="w-full flex h-6 items-center justify-around"/>
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     )
