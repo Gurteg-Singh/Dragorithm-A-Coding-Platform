@@ -22,8 +22,11 @@ function App() {
         <Route path="/signUp" element={isAuthenticated ? <Navigate to="/"/> : <SignUp/>}/>
         <Route path="/login" element={isAuthenticated ? <Navigate to="/"/> : <Login/>}/>
         <Route path="/admin" element={isAuthenticated ? user.role === 'admin' ? <AdminPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
+        <Route path="/admin/createProblem" element={isAuthenticated ? user.role === 'admin' ? <CreateProblem/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
       </Routes>
     )
 }
 
 export default App;
+
+

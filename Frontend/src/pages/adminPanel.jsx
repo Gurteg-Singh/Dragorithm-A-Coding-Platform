@@ -4,7 +4,7 @@ export default function AdminPanel(){
     return(
         <div>
             <div>
-                <button>Create Problem</button>
+                <button className="border-2 border-amber-400 m-2">Create Problem</button>
             </div>
             <div>
                 <button>Update Problem</button>
