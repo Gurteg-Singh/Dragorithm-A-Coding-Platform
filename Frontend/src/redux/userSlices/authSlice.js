@@ -40,7 +40,7 @@ export const checkUser = createAsyncThunk(
     }
 )
 
-const logOutUser = createAsyncThunk(
+export const logOutUser = createAsyncThunk(
     'auth/logOut',
     async(_,thunkAPI)=>{
         try{

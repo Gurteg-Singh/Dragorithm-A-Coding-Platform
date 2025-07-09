@@ -5,10 +5,11 @@ import{Navigate, Route,Routes} from "react-router";
 import { useEffect } from "react";
 import {useSelector,useDispatch} from "react-redux";
 import {checkUser} from "./redux/userSlices/authSlice";
+import AdminPanel from "./pages/adminPanel";
 
 function App() {
 
-  const {isAuthenticated} = useSelector((state)=> state.auth);
+  const {isAuthenticated,user,loading} = useSelector((state)=> state.auth);
   const dispatch = useDispatch();
 
   useEffect(()=>{
@@ -17,9 +18,10 @@ function App() {
 
     return(
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Home/> : <Navigate to="/signUp"/>}/>
+        <Route path="/" element={isAuthenticated ? <Home/> : <Navigate to="/login"/>}/>
         <Route path="/signUp" element={isAuthenticated ? <Navigate to="/"/> : <SignUp/>}/>
         <Route path="/login" element={isAuthenticated ? <Navigate to="/"/> : <Login/>}/>
+        <Route path="/admin" element={isAuthenticated ? user.role === 'admin' ? <AdminPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
       </Routes>
     )
 }

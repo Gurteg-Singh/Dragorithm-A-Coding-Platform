@@ -1,6 +1,8 @@
 import { useEffect,useState } from "react";
 import axiosClient from "../utils/axiosClient";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link ,useNavigate} from "react-router";
+import { logOutUser } from "../redux/userSlices/authSlice";
 
 export default function Home(){
     const {user,isAuthenticated,loading} = useSelector((state)=>state.auth);
@@ -43,12 +45,13 @@ export default function Home(){
             fetchSolvedProblems();
         }
     },[]);
-    console.log("ALL PROBLEMS : ")
-    console.log(problems);
-    console.log("\n");
 
-    console.log("FILTERED PROBLEMS : ")
-    console.log(filteredProblems);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    function handleLogOut(){
+        dispatch(logOutUser());
+        navigate('/login');
+    }
 
     function CreateProblem({data,className}){
         return(
@@ -62,8 +65,9 @@ export default function Home(){
 
     return(
         <div className="w-full h-screen flex flex-col items-center">
-            <nav className="w-full h-8 bg-yellow-500 flex items-center">
-                <button className="text-black text-3xl">Log Out</button>
+            <nav className="w-full h-8 bg-yellow-500 flex items-center justify-around">
+                <button className="text-black text-3xl" onClick={handleLogOut}>Log Out</button>
+                {user.role === 'admin' && <Link to="/admin"><button className="text-black text-3xl">Admin Panel</button></Link>}
             </nav>
 
             <div className="w-[80%] h-60 bg-blue-300">
