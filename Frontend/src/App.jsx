@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import {useSelector,useDispatch} from "react-redux";
 import {checkUser} from "./redux/userSlices/authSlice";
 import AdminPanel from "./pages/adminPanel";
-
+import CreateProblem from "./pages/createProblem";
 function App() {
 
   const {isAuthenticated,user,loading} = useSelector((state)=> state.auth);

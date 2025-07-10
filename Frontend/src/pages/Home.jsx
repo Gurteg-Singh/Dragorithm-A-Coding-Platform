@@ -1,8 +1,7 @@
 import { useEffect,useState } from "react";
 import axiosClient from "../utils/axiosClient";
-import { useDispatch, useSelector } from "react-redux";
-import { Link ,useNavigate} from "react-router";
-import { logOutUser } from "../redux/userSlices/authSlice";
+import {useSelector } from "react-redux";
+import Navbar from "../components/navbar";
 
 export default function Home(){
     const {user,isAuthenticated,loading} = useSelector((state)=>state.auth);
@@ -46,12 +45,7 @@ export default function Home(){
         }
     },[]);
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    function handleLogOut(){
-        dispatch(logOutUser());
-        navigate('/login');
-    }
+    
 
     function CreateProblem({data,className}){
         return(
@@ -65,10 +59,7 @@ export default function Home(){
 
     return(
         <div className="w-full h-screen flex flex-col items-center">
-            <nav className="w-full h-8 bg-yellow-500 flex items-center justify-around">
-                <button className="text-black text-3xl" onClick={handleLogOut}>Log Out</button>
-                {user.role === 'admin' && <Link to="/admin"><button className="text-black text-3xl">Admin Panel</button></Link>}
-            </nav>
+            <Navbar/>
 
             <div className="w-[80%] h-60 bg-blue-300">
                 PROGRESS AND LOGO SECTION 
