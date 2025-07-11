@@ -6,7 +6,7 @@ export default function CreateProblem(){
         title : "",
         description : "",
         difficultyLevel : "",
-        tags : "",
+        tags : [],
         visibleTestCases :[
             {
                 input : "",
@@ -22,13 +22,11 @@ export default function CreateProblem(){
         ],
         code : [
             {
-                language : "",
                 boilerPlateCode : ""
             }
         ],
         solution : [
             {
-                language : "",
                 codeSolution : ""
             }
         ]

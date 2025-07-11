@@ -5,11 +5,13 @@ import {zodResolver} from "@hookform/resolvers/zod";
 
 export default function ProblemForm({data}){
 
+    const validTags = ["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"];
+
     const createProblemSchema = z.object({
         title : z.string().min(1,'Title is required'),
         description : z.string().min(1,'Description is required'),
         difficultyLevel : z.string().enum(["easy","medium","hard"]),
-        tags : z.string().enum(["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"]),
+        tags: z.array(z.enum(validTags)).min(1, "Select at least one tag"),
         visibleTestCases : z.array(
             z.object({
                 input : z.string().min(1,"Input is required"),
@@ -23,17 +25,28 @@ export default function ProblemForm({data}){
                 output : z.string().min(1,"Input is required"),
             })
         ).min(1,"Minimum one test case is required"),
-        
+        code : z.array(
+            z.object({
+                boilerPlateCode : z.string().min(1,"Boiler Plate Code is required")
+            })
+        ),
+        solution : z.array(
+            z.object({
+                codeSolution : z.string().min(1,"Boiler Plate Code is required")
+            })
+        ),
     });
 
     const {register,handleSubmit,formState : {errors},control} = useForm({
         defaultValues:{
-            visibleTestCases : [
-                {input : "",output:"",explanation:""}
-            ],
-            hiddenTestCases :[
-                {input : "",output:""}
-            ]
+            title : data?.title,
+            description : data?.description,
+            difficultyLevel : data?.difficultyLevel,
+            tags: data?.tags,
+            visibleTestCases : data?.visibleTestCases,
+            hiddenTestCases   : data?.hiddenTestCases,
+            code : data?.code,
+            solution : data?.solution
         }
     });
 
@@ -52,8 +65,6 @@ export default function ProblemForm({data}){
         control,
         name : "hiddenTestCases"
     });
-    
-    const validTags = ["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"];
 
     return(
         <div>
