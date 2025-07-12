@@ -10,7 +10,7 @@ export default function ProblemForm({data}){
     const createProblemSchema = z.object({
         title : z.string().min(1,'Title is required'),
         description : z.string().min(1,'Description is required'),
-        difficultyLevel : z.string().enum(["easy","medium","hard"]),
+        difficultyLevel : z.enum(["easy","medium","hard"]),
         tags: z.array(z.enum(validTags)).min(1, "Select at least one tag"),
         visibleTestCases : z.array(
             z.object({
@@ -37,17 +37,19 @@ export default function ProblemForm({data}){
         ),
     });
 
-    const {register,handleSubmit,formState : {errors},control} = useForm({
-        defaultValues:{
-            title : data?.title,
-            description : data?.description,
-            difficultyLevel : data?.difficultyLevel,
-            tags: data?.tags,
-            visibleTestCases : data?.visibleTestCases,
-            hiddenTestCases   : data?.hiddenTestCases,
-            code : data?.code,
-            solution : data?.solution
-        }
+    const {register,handleSubmit,formState : {errors},control} = useForm(
+        {
+            resolver : zodResolver(createProblemSchema),
+            defaultValues:{
+                title : data?.title || "",
+                description : data?.description || "",
+                difficultyLevel : data?.difficultyLevel || "",
+                tags: data?.tags || [],
+                visibleTestCases : data?.visibleTestCases || {input : "",output: "",explanation : ""},
+                hiddenTestCases  : data?.hiddenTestCases || {input : "",output : ""},
+                code : data?.code || [{boilerPlateCode:"",boilerPlateCode:"",boilerPlateCode:""}],
+                solution : data?.solution || [{codeSolution:"",codeSolution:"",codeSolution:""}]
+            },
     });
 
     const {fields : visibleFields,

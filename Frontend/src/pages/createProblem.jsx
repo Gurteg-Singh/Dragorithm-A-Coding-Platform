@@ -23,9 +23,21 @@ export default function CreateProblem(){
         code : [
             {
                 boilerPlateCode : ""
+            },
+            {
+                boilerPlateCode : ""
+            },
+            {
+                boilerPlateCode : ""
             }
         ],
         solution : [
+            {
+                codeSolution : ""
+            },
+            {
+                codeSolution : ""
+            },
             {
                 codeSolution : ""
             }
