@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../utils/axiosClient";
 import { useSelector } from "react-redux";
 import Navbar from "../components/navbar";
-import { useLocation } from "react-router";
+import { useLocation,Link } from "react-router";
 
 export default function Home() {
     const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -53,7 +53,7 @@ export default function Home() {
         return (
             <div className={`${className} grid grid-cols-12 gap-4 py-3 px-4 border-b border-gray-700 hover:bg-gray-800 transition-colors`}>
                 <div className="col-span-5 flex items-center">
-                    <span className="truncate">{data?.title}</span>
+                    <Link to={`/problem/${data?._id}`}><span className="truncate">{data?.title}</span></Link>     
                     {isSolved && (
                         <span className="ml-2 px-2 py-0.5 bg-green-700 text-xs rounded-full">Solved</span>
                     )}
