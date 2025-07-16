@@ -43,7 +43,6 @@ async function adminVerification(req,res,next){
         if(role!=="admin"){
             throw new Error("ERROR : You are not an admin");
         }
-
         next();
     }catch(err){
         res.send("ERROR : " + err.message);

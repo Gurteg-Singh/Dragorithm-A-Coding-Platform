@@ -2,14 +2,11 @@ import { useForm ,useFieldArray} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import axiosClient from "../utils/axiosClient";
-import { useSelector } from "react-redux";
 
 
 export default function ProblemForm({data}){
 
     const validTags = ["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"];
-
-    const{user,isAuthenticated} = useSelector((state)=>state.auth)
 
     const createProblemSchema = z.object({
         title : z.string().min(1,'Title is required'),
@@ -19,23 +16,25 @@ export default function ProblemForm({data}){
         visibleTestCases : z.array(
             z.object({
                 input : z.string().min(1,"Input is required"),
-                output : z.string().min(1,"Input is required"),
-                explanation : z.string().min(1,"Input is required")
+                output : z.string().min(1,"Output is required"),
+                explanation : z.string().min(1,"Explanation is required")
             })
         ).min(1,"Minimum one test case is required"),
         hiddenTestCases : z.array(
             z.object({
                 input : z.string().min(1,"Input is required"),
-                output : z.string().min(1,"Input is required"),
+                output : z.string().min(1,"Output is required"),
             })
         ).min(1,"Minimum one test case is required"),
         code : z.array(
             z.object({
+                language : z.enum(["C++","Java","Javascript"]),
                 boilerPlateCode : z.string().min(1,"Boiler Plate Code is required")
             })
         ).min(3,"BOILER PLATE of ALL LANGUAGES is required"),
         solution : z.array(
             z.object({
+                language : z.enum(["C++","Java","Javascript"]),
                 codeSolution : z.string().min(1,"Boiler Plate Code is required")
             })
         ).min(3,"SOLUTION CODE of ALL LANGUAGES is required"),
@@ -49,10 +48,10 @@ export default function ProblemForm({data}){
                 description : data?.description || "",
                 difficultyLevel : data?.difficultyLevel || "",
                 tags: data?.tags || [],
-                visibleTestCases : data?.visibleTestCases || {input : "",output: "",explanation : ""},
-                hiddenTestCases  : data?.hiddenTestCases || {input : "",output : ""},
-                code : data?.code || [{boilerPlateCode:""},{boilerPlateCode:""},{boilerPlateCode:""}],
-                solution : data?.solution || [{codeSolution:""},{codeSolution:""},{codeSolution:""}]
+                visibleTestCases : data?.visibleTestCases || [{input : "",output: "",explanation : ""}],
+                hiddenTestCases  : data?.hiddenTestCases || [{input : "",output : ""}],
+                code : data?.code || [{language : "C++",boilerPlateCode:""},{language : "Java",boilerPlateCode:""},{language : "Javascript",boilerPlateCode:""}],
+                solution : data?.solution || [{language : "C++",codeSolution:""},{language : "Java",codeSolution:""},{language : "Javascript",codeSolution:""}]
             },
     });
 
@@ -73,21 +72,12 @@ export default function ProblemForm({data}){
     });
 
     async function saveProblem(data){
-        const d = {...data ,
-                    problemCreator : user._id,
-                    code :[
-                        {...data.code[0] , language : "c++"},
-                        {...data.code[1],langaue : "java"},
-                        {...data.code[2],langaue : "javascript"}
-                    ],
-                    solution :[
-                        {...data.solution[0],langaue : "c++"},
-                        {...data.solution[1],langaue : "java"},
-                        {...data.solution[2],langaue : "javascript"}
-                    ]
-                }
-        const response = await axiosClient.post('/problem/create',d);
-        alert(response);
+        try{
+            const result = await axiosClient.post('/problem/create',data);
+            alert(result);
+        }catch(err){
+            console.log("ERROR : " + err.message);
+        }
     }
 
     return(
@@ -214,7 +204,7 @@ export default function ProblemForm({data}){
                                 )
                             })
                         }
-                        <button type="button" onClick={()=>{hiddenAppend({input : "",output:"",explanation:""})}} className="bg-red-600 text-white w-16 p-1 mr-3">Add</button>
+                        <button type="button" onClick={()=>{hiddenAppend({input : "",output:""})}} className="bg-red-600 text-white w-16 p-1 mr-3">Add</button>
                         <button type="button" onClick={()=>{hiddenRemove(hiddenFields.length - 1)}} className="bg-blue-500 text-white w-16 p-1">Remove</button>
                     </div>
                 </div>
@@ -227,7 +217,7 @@ export default function ProblemForm({data}){
                     <h3> Boiler Plate code : </h3>
                     <div>
                         <label htmlFor="c++BoilerPlate">C++ :</label>
-                        <textarea {...register(`code.0.boilerPlateCode`)} id="c++BoilerPlate" rows={10} cols={30} className="overflow-scroll border-1 border-black"></textarea>
+                        <textarea {...register(`code.0.boilerPlateCode`)} id="c++BoilerPlate" rows={10} cols={30} className="overflow-x-scroll border-1 border-black"></textarea>
                     </div>
                     {errors.code?.[0]?.boilerPlateCode && (
                         <p className="mt-1 text-sm text-red-500">{errors.code?.[0]?.boilerPlateCode.message}</p>

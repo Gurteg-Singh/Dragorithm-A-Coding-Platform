@@ -17,7 +17,6 @@ function findLanguageId(lang){
         "c++" : 105,
         "javascript" : 102
     }
-
     return map[l];
 }
 

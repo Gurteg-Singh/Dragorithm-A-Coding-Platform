@@ -9,9 +9,11 @@ async function createProblem(req,res){
         const {title,description,difficultyLevel,tags,visibleTestCases,hiddenTestCases,code,solution} = req.body;
         
         for(const sol of solution){
+            console.log(sol.language);
             const langId = findLanguageId(sol.language);
+            console.log("LANG ID FOUND");
+            
             const src_code = sol.codeSolution;
-
             const submission = visibleTestCases.map((val)=>{
                 return(
                     {
@@ -22,7 +24,7 @@ async function createProblem(req,res){
                     }
                 )
             })
-
+            console.log("CODE SENT TO JUDGE0");
             const submitResult = await submitBatch(submission);
             const codeTokens = submitResult.map((val)=>{
                 return val.token;
@@ -30,20 +32,26 @@ async function createProblem(req,res){
 
             const tokenString = codeTokens.join(',');
             const result = await submitToken(tokenString);
+            console.log("TOKEN SENT TO JUDGE0");
 
             for(const ele of result){
                 if(ele.status_id !== 3){
                     const message = getErrorMessage(ele.status_id);
+                    console.log(message);
                     return res.status(400).send("ERROR : " + message);
+
                 }
             }
+            console.log("CODE PASSED");
         }// Reference code pass all verification steps if code reached this line.
         // now lets save to database 
-
+        console.log("I M HERE");
         const newproblem = await Problem.create({...req.body,problemCreator : req.result._id});
+        console.log("problem creator added");
         res.status(201).send("Problem created successfully");
         
     }catch(err){
+        console.log(err);
         res.status(400).send("ERROR : " + err.message);
     }
 }

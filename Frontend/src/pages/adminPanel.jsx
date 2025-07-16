@@ -1,6 +1,9 @@
 import { Link } from "react-router";
 
 export default function AdminPanel(){
+
+    
+    
     return(
         <div>
             <div>

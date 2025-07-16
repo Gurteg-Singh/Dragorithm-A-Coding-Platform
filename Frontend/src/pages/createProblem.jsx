@@ -22,23 +22,29 @@ export default function CreateProblem(){
         ],
         code : [
             {
+                language : "C++",
                 boilerPlateCode : ""
             },
             {
+                language : "Java",
                 boilerPlateCode : ""
             },
             {
+                language : "Javascript",
                 boilerPlateCode : ""
             }
         ],
         solution : [
             {
+                language : "C++",
                 codeSolution : ""
             },
             {
+                language : "Java",
                 codeSolution : ""
             },
             {
+                language : "Javascript",
                 codeSolution : ""
             }
         ]
