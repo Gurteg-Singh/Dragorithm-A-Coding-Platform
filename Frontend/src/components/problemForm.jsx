@@ -2,12 +2,13 @@ import { useForm ,useFieldArray} from "react-hook-form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import axiosClient from "../utils/axiosClient";
+import { useNavigate } from "react-router";
 
 
 export default function ProblemForm({data}){
 
     const validTags = ["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"];
-
+    const languages = ["C++","Java","Javascript"];
     const createProblemSchema = z.object({
         title : z.string().min(1,'Title is required'),
         description : z.string().min(1,'Description is required'),
@@ -70,211 +71,293 @@ export default function ProblemForm({data}){
         control,
         name : "hiddenTestCases"
     });
-
+    const navigate = useNavigate();
     async function saveProblem(data){
         try{
             const result = await axiosClient.post('/problem/create',data);
-            alert(result);
+            alert("PROBLEM CREATED");
+            navigate("/");
         }catch(err){
-            console.log("ERROR : " + err.message);
+            alert("AN ERROR OCCURED : " + err.message);
         }
     }
 
     return(
-        <div className="w-full h-screen flex flex-col p-1">
-            <form onSubmit={handleSubmit(saveProblem)} className="w-[90]% flex flex-col justify-start items-start pt-6 pl-6 gap-3">
-                {/*TITLE*/}
-                <div>
-                    <label htmlFor="title">Title : </label>
-                    <input {...register("title")} id="title" className="border-1 border-black"/>
-                </div>
-                {errors.title && (
-                    <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>
-                )}
+        <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6">
+            <form onSubmit={handleSubmit(saveProblem)} className="max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold mb-6 border-b border-gray-700 pb-3">
+                    {data.title === "" ? "Create New Problem" : "Edit Problem"}
+                </h2>
+                
+                {/* Basic Information Section */}
+                <div className="mb-8">
+                    <h3 className="text-xl font-semibold mb-4 text-indigo-400">Basic Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Title */}
+                        <div>
+                            <label htmlFor="title" className="block mb-2 font-medium">Title</label>
+                            <input
+                                {...register("title")}
+                                id="title"
+                                className={`w-full bg-gray-700 border ${errors.title ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                            />
+                            {errors.title && (
+                                <p className="mt-1 text-sm text-red-400">{errors.title.message}</p>
+                            )}
+                        </div>
 
-                {/*DESCRIPTION*/}
-                <div>
-                    <label htmlFor="description">Description : </label>
-                    <input {...register("description")} id="description" className="border-1 border-black"/>
-                </div>
-                {errors.description && (
-                    <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>
-                )}
+                        {/* Difficulty Level */}
+                        <div>
+                            <label htmlFor="difficultyLevel" className="block mb-2 font-medium">Difficulty Level</label>
+                            <select
+                                {...register("difficultyLevel")}
+                                id="difficultyLevel"
+                                className={`w-full bg-gray-700 border ${errors.difficultyLevel ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                            >
+                                <option value="">Select difficulty</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                            {errors.difficultyLevel && (
+                                <p className="mt-1 text-sm text-red-400">{errors.difficultyLevel.message}</p>
+                            )}
+                        </div>
 
-                {/*DIFFICULTY LEVEL*/}
-                <div>
-                    <label htmlFor="difficultyLevel">Difficulty Level : </label>
-                    <select {...register("difficultyLevel")} id="difficultyLevel" className="border-1 border-black">
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                    </select>
-                </div>
-                {errors.difficultyLevel && (
-                    <p className="mt-1 text-sm text-red-500">{errors.difficultyLevel?.message}</p>
-                )}
+                        {/* Description */}
+                        <div className="md:col-span-2">
+                            <label htmlFor="description" className="block mb-2 font-medium">Description</label>
+                            <textarea
+                                {...register("description")}
+                                id="description"
+                                rows={4}
+                                className={`w-full bg-gray-700 border ${errors.description ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500`}
+                            />
+                            {errors.description && (
+                                <p className="mt-1 text-sm text-red-400">{errors.description.message}</p>
+                            )}
+                        </div>
 
-                {/*TAGS*/}
-                <div>
-                    <label htmlFor="tags">Select Tags</label>
-                    <div className="flex justify-start items-center gap-3">
-                        {
-                            validTags.map((val)=>{
-                                return(
-                                    <div key={val} className="flex justify-center items-center">
-                                        <input type="checkbox" id={val} {...register('tags')} value={val} className="mt-1 mr-1"/>
-                                        <label htmlFor={val}>{val}</label>
+                        {/* Tags */}
+                        <div className="md:col-span-2">
+                            <label className="block mb-2 font-medium">Tags</label>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                {validTags.map((val) => (
+                                    <div key={val} className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            id={val}
+                                            {...register('tags')}
+                                            value={val}
+                                            className="h-4 w-4 text-indigo-600 rounded focus:ring-indigo-500"
+                                        />
+                                        <label htmlFor={val} className="ml-2 text-sm">{val}</label>
                                     </div>
-                                )
-                            })
-                        }
+                                ))}
+                            </div>
+                            {errors.tags && (
+                                <p className="mt-1 text-sm text-red-400">{errors.tags.message}</p>
+                            )}
+                        </div>
                     </div>
                 </div>
-                {errors.tags && (
-                    <p className="mt-1 text-sm text-red-500">{errors.tags.message}</p>
-                )}
 
-                {/*VISIBLE TEST CASES*/}
-                <div>
-                    <label>Visible Test Cases : </label>
-                    <div>
-                        {
-                            visibleFields.map((field,index)=>{
-                                return(
-                                    <div key={field.id}>
-                                        <div>
-                                            <label htmlFor="vtcI">Input : </label>
-                                            <textarea {...register(`visibleTestCases.${index}.input`)} id="vtcI" rows={10} cols={30} className="overflow-scroll border-1 border-black"></textarea>
-                                        </div>
+                {/* Test Cases Section */}
+                <div className="mb-8">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-xl font-semibold text-indigo-400">Test Cases</h3>
+                    </div>
+
+                    {/* Visible Test Cases */}
+                    <div className="mb-6">
+                        <div className="flex justify-between items-center mb-3">
+                            <h4 className="font-medium text-lg">Visible Test Cases</h4>
+                            <div className="flex space-x-2">
+                                <button
+                                    type="button"
+                                    onClick={() => visibleAppend({ input: "", output: "", explanation: "" })}
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm"
+                                >
+                                    Add Test Case
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => visibleRemove(visibleFields.length - 1)}
+                                    disabled={visibleFields.length <= 1}
+                                    className={`${visibleFields.length <= 1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'} text-white px-3 py-1 rounded-md text-sm`}
+                                >
+                                    Remove Last
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            {visibleFields.map((field, index) => (
+                                <div key={field.id} className="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                    <div className="mb-4">
+                                        <label className="block mb-2 font-medium">Input</label>
+                                        <textarea
+                                            {...register(`visibleTestCases.${index}.input`)}
+                                            rows={3}
+                                            className={`w-full bg-gray-700 border ${errors.visibleTestCases?.[index]?.input ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                        />
                                         {errors.visibleTestCases?.[index]?.input && (
-                                            <p className="mt-1 text-sm text-red-500">{errors.visibleTestCases?.[index]?.input.message}</p>
+                                            <p className="mt-1 text-sm text-red-400">{errors.visibleTestCases?.[index]?.input.message}</p>
                                         )}
+                                    </div>
 
-                                        <div>
-                                            <label htmlFor="vtcO">Output : </label>
-                                            <textarea {...register(`visibleTestCases.${index}.output`)} id="vtcO" rows={10} cols={30} className="overflow-scroll border-1 border-black"></textarea>
-                                        </div>
+                                    <div className="mb-4">
+                                        <label className="block mb-2 font-medium">Output</label>
+                                        <textarea
+                                            {...register(`visibleTestCases.${index}.output`)}
+                                            rows={3}
+                                            className={`w-full bg-gray-700 border ${errors.visibleTestCases?.[index]?.output ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                        />
                                         {errors.visibleTestCases?.[index]?.output && (
-                                            <p className="mt-1 text-sm text-red-500">{errors.visibleTestCases?.[index]?.output.message}</p>
+                                            <p className="mt-1 text-sm text-red-400">{errors.visibleTestCases?.[index]?.output.message}</p>
                                         )}
-                                        
-                                        <div>
-                                            <label htmlFor="vtcE">Explanation : </label>
-                                            <textarea {...register(`visibleTestCases.${index}.explanation`)} id="vtcE" rows={8} cols={50} className="overflow-scroll border-1 border-black"></textarea>
-                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-2 font-medium">Explanation</label>
+                                        <textarea
+                                            {...register(`visibleTestCases.${index}.explanation`)}
+                                            rows={2}
+                                            className={`w-full bg-gray-700 border ${errors.visibleTestCases?.[index]?.explanation ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white`}
+                                        />
                                         {errors.visibleTestCases?.[index]?.explanation && (
-                                            <p className="mt-1 text-sm text-red-500">{errors.visibleTestCases?.[index]?.explanation.message}</p>
+                                            <p className="mt-1 text-sm text-red-400">{errors.visibleTestCases?.[index]?.explanation.message}</p>
                                         )}
                                     </div>
-                                )
-                            })
-                        }
-                        <button type="button" onClick={()=>{visibleAppend({input : "",output:"",explanation:""})}} className="bg-red-600 text-white w-16 p-1 mr-3">Add</button>
-                        <button type="button" onClick={()=>{visibleRemove(visibleFields.length - 1)}} className="bg-blue-500 text-white w-16 p-1">Remove</button>
+                                </div>
+                            ))}
+                        </div>
+                        {errors.visibleTestCases && (
+                            <p className="mt-2 text-sm text-red-400">{errors.visibleTestCases.message}</p>
+                        )}
                     </div>
-                </div>
-                {errors.visibleTestCases && (
-                    <p className="mt-1 text-sm text-red-500">{errors.visibleTestCases.message}</p>
-                )}
 
-                {/*HIDDEN TEST CASES*/}
-                <div>
-                    <label>Hidden Test Cases : </label>
+                    {/* Hidden Test Cases */}
                     <div>
-                        {
-                            hiddenFields.map((field,index)=>{
-                                return(
-                                    <div key={field.id}>
+                        <div className="flex justify-between items-center mb-3">
+                            <h4 className="font-medium text-lg">Hidden Test Cases</h4>
+                            <div className="flex space-x-2">
+                                <button
+                                    type="button"
+                                    onClick={() => hiddenAppend({ input: "", output: "" })}
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm"
+                                >
+                                    Add Test Case
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => hiddenRemove(hiddenFields.length - 1)}
+                                    disabled={hiddenFields.length <= 1}
+                                    className={`${hiddenFields.length <= 1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'} text-white px-3 py-1 rounded-md text-sm`}
+                                >
+                                    Remove Last
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            {hiddenFields.map((field, index) => (
+                                <div key={field.id} className="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label htmlFor="htcI">Input : </label>
-                                            <textarea {...register(`hiddenTestCases.${index}.input`)} id="htcI" rows={10} cols={30} className="overflow-scroll border-1 border-black"></textarea>
+                                            <label className="block mb-2 font-medium">Input</label>
+                                            <textarea
+                                                {...register(`hiddenTestCases.${index}.input`)}
+                                                rows={3}
+                                                className={`w-full bg-gray-700 border ${errors.hiddenTestCases?.[index]?.input ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                            />
+                                            {errors.hiddenTestCases?.[index]?.input && (
+                                                <p className="mt-1 text-sm text-red-400">{errors.hiddenTestCases?.[index]?.input.message}</p>
+                                            )}
                                         </div>
-                                        {errors.hiddenTestCases?.[index]?.input && (
-                                            <p className="mt-1 text-sm text-red-500">{errors.hiddenTestCases?.[index]?.input.message}</p>
-                                        )}
 
                                         <div>
-                                            <label htmlFor="htcO">Output : </label>
-                                            <textarea {...register(`hiddenTestCases.${index}.output`)} id="htcO" rows={10} cols={30} className="overflow-scroll border-1 border-black"></textarea>
+                                            <label className="block mb-2 font-medium">Output</label>
+                                            <textarea
+                                                {...register(`hiddenTestCases.${index}.output`)}
+                                                rows={3}
+                                                className={`w-full bg-gray-700 border ${errors.hiddenTestCases?.[index]?.output ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                            />
+                                            {errors.hiddenTestCases?.[index]?.output && (
+                                                <p className="mt-1 text-sm text-red-400">{errors.hiddenTestCases?.[index]?.output.message}</p>
+                                            )}
                                         </div>
-                                        {errors.hiddenTestCases?.[index]?.output && (
-                                            <p className="mt-1 text-sm text-red-500">{errors.hiddenTestCases?.[index]?.output.message}</p>
-                                        )}
                                     </div>
-                                )
-                            })
-                        }
-                        <button type="button" onClick={()=>{hiddenAppend({input : "",output:""})}} className="bg-red-600 text-white w-16 p-1 mr-3">Add</button>
-                        <button type="button" onClick={()=>{hiddenRemove(hiddenFields.length - 1)}} className="bg-blue-500 text-white w-16 p-1">Remove</button>
+                                </div>
+                            ))}
+                        </div>
+                        {errors.hiddenTestCases && (
+                            <p className="mt-2 text-sm text-red-400">{errors.hiddenTestCases.message}</p>
+                        )}
                     </div>
                 </div>
-                {errors.hiddenTestCases && (
-                    <p className="mt-1 text-sm text-red-500">{errors.hiddenTestCases.message}</p>
-                )}
 
-                {/*BOILER PLATE CODE*/}
-                <div>
-                    <h3> Boiler Plate code : </h3>
-                    <div>
-                        <label htmlFor="c++BoilerPlate">C++ :</label>
-                        <textarea {...register(`code.0.boilerPlateCode`)} id="c++BoilerPlate" rows={10} cols={30} className="overflow-x-scroll border-1 border-black"></textarea>
+                {/* Code Section */}
+                <div className="mb-8">
+                    <h3 className="text-xl font-semibold mb-4 text-indigo-400">Code Setup</h3>
+                    
+                    {/* Boilerplate Code */}
+                    <div className="mb-6">
+                        <h4 className="font-medium text-lg mb-3">Boilerplate Code</h4>
+                        <div className="space-y-4">
+                            {languages.map((lang, index) => (
+                                <div key={lang} className="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                    <label className="block mb-2 font-medium">{lang} Boilerplate</label>
+                                    <textarea
+                                        {...register(`code.${index}.boilerPlateCode`)}
+                                        rows={8}
+                                        className={`w-full bg-gray-700 border ${errors.code?.[index]?.boilerPlateCode ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                    />
+                                    {errors.code?.[index]?.boilerPlateCode && (
+                                        <p className="mt-1 text-sm text-red-400">{errors.code?.[index]?.boilerPlateCode.message}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        {errors.code && (
+                            <p className="mt-2 text-sm text-red-400">{errors.code.message}</p>
+                        )}
                     </div>
-                    {errors.code?.[0]?.boilerPlateCode && (
-                        <p className="mt-1 text-sm text-red-500">{errors.code?.[0]?.boilerPlateCode.message}</p>
-                    )}
 
+                    {/* Solution Code */}
                     <div>
-                        <label htmlFor="javaBoilerPlate">Java :</label>
-                        <textarea {...register(`code.1.boilerPlateCode`)} id="javaBoilerPlate" rows={10} cols={30} className="overflow-scroll border-1 border-black"></textarea>
+                        <h4 className="font-medium text-lg mb-3">Solution Code</h4>
+                        <div className="space-y-4">
+                            {languages.map((lang, index) => (
+                                <div key={lang} className="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                    <label className="block mb-2 font-medium">{lang} Solution</label>
+                                    <textarea
+                                        {...register(`solution.${index}.codeSolution`)}
+                                        rows={10}
+                                        className={`w-full bg-gray-700 border ${errors.solution?.[index]?.codeSolution ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                    />
+                                    {errors.solution?.[index]?.codeSolution && (
+                                        <p className="mt-1 text-sm text-red-400">{errors.solution?.[index]?.codeSolution.message}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        {errors.solution && (
+                            <p className="mt-2 text-sm text-red-400">{errors.solution.message}</p>
+                        )}
                     </div>
-                    {errors.code?.[1]?.boilerPlateCode && (
-                        <p className="mt-1 text-sm text-red-500">{errors.code?.[1]?.boilerPlateCode.message}</p>
-                    )}
-
-                    <div>
-                        <label htmlFor="jsBoilerPlate">Javascript :</label>
-                        <textarea {...register(`code.2.boilerPlateCode`)} id="jsBoilerPlate" rows={10} cols={30} className="overflow-scroll border-1 border-black"></textarea>
-                    </div>
-                    {errors.code?.[2]?.boilerPlateCode && (
-                        <p className="mt-1 text-sm text-red-500">{errors.code?.[2]?.boilerPlateCode.message}</p>
-                    )}
                 </div>
-                {errors.code && (
-                    <p className="mt-1 text-sm text-red-500">{errors.code.message}</p>
-                )}
 
-                {/*Solution CODE*/}
-                <div>
-                    <div>
-                        <label htmlFor="c++Solution">C++ Solution :</label>
-                        <textarea {...register(`solution.0.codeSolution`)} id="c++Solution" rows={20} cols={50} className="overflow-scroll border-1 border-black"></textarea>
-                    </div>
-                    {errors.solution?.[0]?.codeSolution && (
-                        <p className="mt-1 text-sm text-red-500">{errors.solution?.[0]?.codeSolution.message}</p>
-                    )}
-
-                    <div>
-                        <label htmlFor="javaSolution">Java Solution :</label>
-                        <textarea {...register(`solution.1.codeSolution`)} id="javaSolution" rows={20} cols={50} className="overflow-scroll border-1 border-black"></textarea>
-                    </div>
-                    {errors.solution?.[1]?.codeSolution && (
-                        <p className="mt-1 text-sm text-red-500">{errors.solution?.[1]?.codeSolution.message}</p>
-                    )}
-
-                    <div>
-                        <label htmlFor="jsSolution">Javascript Solution :</label>
-                        <textarea {...register(`solution.2.codeSolution`)} id="jsSolution" rows={20} cols={50} className="overflow-scroll border-1 border-black"></textarea>
-                    </div>
-                    {errors.solution?.[2]?.codeSolution && (
-                        <p className="mt-1 text-sm text-red-500">{errors.solution?.[2]?.codeSolution.message}</p>
-                    )}
+                {/* Submit Button */}
+                <div className="flex justify-center">
+                    <button
+                        type="submit"
+                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg"
+                    >
+                        {data.title === "" ? "Create Problem" : "Update Problem"}
+                    </button>
                 </div>
-                {errors.solution && (
-                    <p className="mt-1 text-sm text-red-500">{errors.solution.message}</p>
-                )}
-
-                <button type="submit" className="bg-green-500 w-64 p-2 mb-4">Create Problem</button>
             </form>
         </div>
-    )
+    );
 }
