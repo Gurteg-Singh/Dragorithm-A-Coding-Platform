@@ -30,7 +30,7 @@ function App() {
         <Route path="/admin" element={isAuthenticated ? user.role === 'admin' ? <AdminPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/createProblem" element={isAuthenticated ? user.role === 'admin' ? <CreateProblem/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/problem/:id" element={isAuthenticated ? <ProblemPage/> : <Navigate to="/"/>}>
-          <Route index element={<ProblemDescription/>}></Route>
+          <Route index element={<Navigate to="description" replace />}></Route>
           <Route path="description" element={<ProblemDescription/>}></Route>
           <Route path="editorial" element={<ProblemEditorial/>}></Route>
           <Route path="solution" element={<ProblemSolution/>}></Route>
