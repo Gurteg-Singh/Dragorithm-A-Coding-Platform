@@ -30,6 +30,18 @@ const problemSchema = mongoose.Schema({
             output:{
                 type:String,
                 required:true
+            }
+        }
+    ],
+    visibleTestCasesForUser:[
+        {
+            input:{
+                type:String,
+                required:true
+            },
+            output:{
+                type:String,
+                required:true
             },
             explanation:{
                 type:String,
