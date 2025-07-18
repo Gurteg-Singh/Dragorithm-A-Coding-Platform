@@ -17,6 +17,12 @@ export default function ProblemForm({data}){
         visibleTestCases : z.array(
             z.object({
                 input : z.string().min(1,"Input is required"),
+                output : z.string().min(1,"Output is required")
+            })
+        ).min(1,"Minimum one test case is required"),
+        visibleTestCasesForUser : z.array(
+            z.object({
+                input : z.string().min(1,"Input is required"),
                 output : z.string().min(1,"Output is required"),
                 explanation : z.string().min(1,"Explanation is required")
             })
@@ -50,6 +56,7 @@ export default function ProblemForm({data}){
                 difficultyLevel : data?.difficultyLevel || "",
                 tags: data?.tags || [],
                 visibleTestCases : data?.visibleTestCases || [{input : "",output: "",explanation : ""}],
+                visibleTestCasesForUser : data?.visibleTestCases || [{input : "",output: ""}],
                 hiddenTestCases  : data?.hiddenTestCases || [{input : "",output : ""}],
                 code : data?.code || [{language : "C++",boilerPlateCode:""},{language : "Java",boilerPlateCode:""},{language : "Javascript",boilerPlateCode:""}],
                 solution : data?.solution || [{language : "C++",codeSolution:""},{language : "Java",codeSolution:""},{language : "Javascript",codeSolution:""}]
@@ -62,6 +69,14 @@ export default function ProblemForm({data}){
     } = useFieldArray({
         control,
         name : "visibleTestCases"
+    });
+
+    const {fields : visibleUserFields,
+        append : visibleUserAppend,
+        remove : visibleUserRemove
+    } = useFieldArray({
+        control,
+        name : "visibleTestCasesForUser"
     });
 
     const {fields : hiddenFields,
@@ -217,23 +232,80 @@ export default function ProblemForm({data}){
                                             <p className="mt-1 text-sm text-red-400">{errors.visibleTestCases?.[index]?.output.message}</p>
                                         )}
                                     </div>
-
-                                    <div>
-                                        <label className="block mb-2 font-medium">Explanation</label>
-                                        <textarea
-                                            {...register(`visibleTestCases.${index}.explanation`)}
-                                            rows={2}
-                                            className={`w-full bg-gray-700 border ${errors.visibleTestCases?.[index]?.explanation ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white`}
-                                        />
-                                        {errors.visibleTestCases?.[index]?.explanation && (
-                                            <p className="mt-1 text-sm text-red-400">{errors.visibleTestCases?.[index]?.explanation.message}</p>
-                                        )}
-                                    </div>
                                 </div>
                             ))}
                         </div>
                         {errors.visibleTestCases && (
                             <p className="mt-2 text-sm text-red-400">{errors.visibleTestCases.message}</p>
+                        )}
+                    </div>
+
+                    {/* Visible Test Cases For User*/}
+                    <div className="mb-6">
+                        <div className="flex justify-between items-center mb-3">
+                            <h4 className="font-medium text-lg">Visible Test Cases For User Interface</h4>
+                            <div className="flex space-x-2">
+                                <button
+                                    type="button"
+                                    onClick={() => visibleUserAppend({ input: "", output: "", explanation: "" })}
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm"
+                                >
+                                    Add Test Case
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => visibleUserRemove(visibleUserFields.length - 1)}
+                                    disabled={visibleUserFields.length <= 1}
+                                    className={`${visibleUserFields.length <= 1 ? 'bg-gray-600 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'} text-white px-3 py-1 rounded-md text-sm`}
+                                >
+                                    Remove Last
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            {visibleUserFields.map((field, index) => (
+                                <div key={field.id} className="bg-gray-750 rounded-lg p-4 border border-gray-700">
+                                    <div className="mb-4">
+                                        <label className="block mb-2 font-medium">Input</label>
+                                        <textarea
+                                            {...register(`visibleTestCasesForUser.${index}.input`)}
+                                            rows={3}
+                                            className={`w-full bg-gray-700 border ${errors.visibleTestCasesForUser?.[index]?.input ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                        />
+                                        {errors.visibleTestCasesForUser?.[index]?.input && (
+                                            <p className="mt-1 text-sm text-red-400">{errors.visibleTestCasesForUser?.[index]?.input.message}</p>
+                                        )}
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <label className="block mb-2 font-medium">Output</label>
+                                        <textarea
+                                            {...register(`visibleTestCasesForUser.${index}.output`)}
+                                            rows={3}
+                                            className={`w-full bg-gray-700 border ${errors.visibleTestCasesForUser?.[index]?.output ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white font-mono text-sm`}
+                                        />
+                                        {errors.visibleTestCasesForUser?.[index]?.output && (
+                                            <p className="mt-1 text-sm text-red-400">{errors.visibleTestCasesForUser?.[index]?.output.message}</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-2 font-medium">Explanation</label>
+                                        <textarea
+                                            {...register(`visibleTestCasesForUser.${index}.explanation`)}
+                                            rows={2}
+                                            className={`w-full bg-gray-700 border ${errors.visibleTestCasesForUser?.[index]?.explanation ? "border-red-500" : "border-gray-600"} rounded-lg py-2 px-3 text-white`}
+                                        />
+                                        {errors.visibleTestCasesForUser?.[index]?.explanation && (
+                                            <p className="mt-1 text-sm text-red-400">{errors.visibleTestCasesForUser?.[index]?.explanation.message}</p>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        {errors.visibleTestCasesForUser && (
+                            <p className="mt-2 text-sm text-red-400">{errors.visibleTestCasesForUser.message}</p>
                         )}
                     </div>
 

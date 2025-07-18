@@ -10,6 +10,12 @@ export default function CreateProblem(){
         visibleTestCases :[
             {
                 input : "",
+                output : ""
+            }
+        ],
+        visibleTestCasesForUser :[
+            {
+                input : "",
                 output : "",
                 explanation : ""
             }
