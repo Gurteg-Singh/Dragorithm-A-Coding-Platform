@@ -2,7 +2,7 @@ import { useOutletContext } from "react-router";
 
 export default function ProblemDescription(){
 
-    const {problem} = useOutletContext();
+    const problem = useOutletContext();
     return(
         <div className="flex flex-col gap-4">
             <div className="text-1xl text-white font-bold">{problem?.title}</div>

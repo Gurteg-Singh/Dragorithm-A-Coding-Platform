@@ -26,44 +26,115 @@ export default function ProblemPage(){
         fetchProblemData();
     },[])
     console.log(problem);
-    return(
-        <div className="h-screen w-screen flex flex-col">
-            <div className='w-full'>
-                <Navbar/>
-            </div>
-            <div className='w-full flex flex-1'>
-                {/* Left Side */}
-                <div className="h-[100%] w-[45%] bg-gray-600">
-                    <div>
-                        <nav className='flex w-full justify-around items-center text-1xl text-white font-bold border-1 border-amber-400'>
-                            <NavLink to={`/problem/${problem_id}/description`} className={({ isActive }) =>isActive? "text-yellow-400": "text-white"}><div>Description</div></NavLink>
-                            <NavLink to={`/problem/${problem_id}/editorial`} className={({ isActive }) =>isActive? "text-yellow-400": "text-white"}><div>Editorial</div></NavLink>
-                            <NavLink to={`/problem/${problem_id}/solution`} className={({ isActive }) =>isActive? "text-yellow-400": "text-white"}><div>Solution</div></NavLink>
-                            <NavLink to={`/problem/${problem_id}/submissions`} className={({ isActive }) =>isActive? "text-yellow-400": "text-white"}><div>Submissions</div></NavLink>
-                        </nav>
+    return (
+        <div className="h-screen w-screen flex flex-col bg-gray-700">
+            <Navbar />
+            
+            <div className='w-full flex flex-1 overflow-hidden'>
+                {/* Left Side (45%) */}
+                <div className="h-full w-[45%] flex flex-col bg-gray-700 border-r-1 border-white">
+                    {/* Navigation Tabs */}
+                    <div className="h-12 flex ">
+                        <NavLink 
+                            to={`/problem/${problem_id}/description`} 
+                            className={({ isActive }) => 
+                                `flex-1 flex items-center justify-center ${isActive ? 
+                                    "bg-gray-800 text-indigo-400 border-b-2 border-indigo-400" : 
+                                    "text-gray-400 hover:bg-gray-750"}`
+                            }
+                        >
+                            Description
+                        </NavLink>
+                        <NavLink 
+                            to={`/problem/${problem_id}/editorial`} 
+                            className={({ isActive }) => 
+                                `flex-1 flex items-center justify-center ${isActive ? 
+                                    "bg-gray-800 text-indigo-400 border-b-2 border-indigo-400" : 
+                                    "text-gray-400 hover:bg-gray-750"}`
+                            }
+                        >
+                            Editorial
+                        </NavLink>
+                        <NavLink 
+                            to={`/problem/${problem_id}/solution`} 
+                            className={({ isActive }) => 
+                                `flex-1 flex items-center justify-center ${isActive ? 
+                                    "bg-gray-800 text-indigo-400 border-b-2 border-indigo-400" : 
+                                    "text-gray-400 hover:bg-gray-750"}`
+                            }
+                        >
+                            Solution
+                        </NavLink>
+                        <NavLink 
+                            to={`/problem/${problem_id}/submissions`} 
+                            className={({ isActive }) => 
+                                `flex-1 flex items-center justify-center ${isActive ? 
+                                    "text-indigo-400 border-b-2 border-indigo-400 bg-gray-800" : 
+                                    "text-gray-400 hover:bg-gray-750"}`
+                            }
+                        >
+                            Submissions
+                        </NavLink>
                     </div>
-                    <Outlet context = {problem}></Outlet>
+                    
+                    {/* Content Area */}
+                    <div className="flex-1 overflow-y-auto p-4 text-gray-200">
+                        <Outlet context={problem} />
+                    </div>
                 </div>
 
-                {/*Right Side*/}
-                <div className="h-[100%] w-[55%] bg-blue-200 flex flex-col">
-                    {/* <nav>
-                        <select value={lang} onChange={(e)=>{setlang(e.target.value)}}>
-                            <option value="c++">C++</option>
-                            <option value="java">Java</option>
-                            <option value="javascript">Javascript</option>
-                        </select>
-                        <button onClick={()=>{setisActive("code")}} className='flex w-full justify-around items-center text-1xl text-white font-bold border-1 border-amber-400'>Code</button>
-                    </nav>
-                    <div>
-                        {isActive === "code" && <CodeEditor editorRef={editorRef}/>}
-                        {isActive === "run" && <RunCode/>}
-                        {isActive === "submit" && <SubmitCode/>}
+                {/* Right Side (55%) */}
+                <div className="h-full w-[55%] flex flex-col bg-gray-700 border-l border-gray-700">
+                    {/* Top Navigation Bar */}
+                    <div className="h-12 flex items-center justify-between px-4 bg-gray-700 border-b border-gray-700">
+                        <div>
+                            <select 
+                                value={lang} 
+                                onChange={(e) => setlang(e.target.value)}
+                                className="bg-gray-700 text-gray-200 border border-gray-600 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                                <option value="C++">C++</option>
+                                <option value="Java">Java</option>
+                                <option value="Javascript">JavaScript</option>
+                            </select>
+                        </div>
+                        
+                        <div className="flex space-x-2">
+                            <button 
+                                onClick={() => setisActive("code")}
+                                className={`px-3 py-1 rounded-md text-sm font-medium ${
+                                    isActive === "code" 
+                                        ? "bg-indigo-600 text-white" 
+                                        : "text-gray-400 hover:bg-gray-700"
+                                }`}
+                            >
+                                Code
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <button onClick={()=>{setisActive("run")}}>Run</button>
-                        <button onClick={()=>{setisActive("submit")}}>Submit</button>
-                    </div> */}
+                    
+                    {/* Editor Area */}
+                    <div className='flex-1 overflow-hidden'>
+                        {isActive === "code" && <CodeEditor editorRef={editorRef} lang={lang} problem={problem}/>}
+                        {isActive === "run" && <div className="h-full p-4 text-white">Run Code UI</div>}
+                        {isActive === "submit" && <div className="h-full p-4 text-white">Submit Code UI</div>}
+                    </div>
+                    
+                    {/* Bottom Action Bar */}
+                    <div className='h-12 flex items-center justify-end px-4 bg-gray-700'>
+                        <button 
+                            onClick={() => setisActive("run")}
+                            className="px-4 py-2 mr-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md text-sm font-medium transition"
+                        >
+                            Run
+                        </button>
+                        <button 
+                            onClick={() => setisActive("submit")}
+                            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition"
+                        >
+                            Submit
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
