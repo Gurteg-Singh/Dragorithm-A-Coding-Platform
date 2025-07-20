@@ -10,7 +10,7 @@ export default function ProblemPage(){
     const [problem,setproblem] = useState({});
 
 
-    const [lang,setlang] = useState("C++");
+    const [lang,setlang] = useState("c++");
     const [isActive,setisActive] = useState("code");
     const editorRef = useRef(null);
 
@@ -32,14 +32,14 @@ export default function ProblemPage(){
             
             <div className='w-full flex flex-1 overflow-hidden'>
                 {/* Left Side (45%) */}
-                <div className="h-full w-[45%] flex flex-col bg-gray-700 border-r-1 border-white">
+                <div className="h-full w-[45%] flex flex-col bg-neutral-800 border-r-1 border-white">
                     {/* Navigation Tabs */}
-                    <div className="h-12 flex ">
+                    <div className="h-12 flex bg-gray-700">
                         <NavLink 
                             to={`/problem/${problem_id}/description`} 
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
-                                    "bg-gray-800 text-indigo-400 border-b-2 border-indigo-400" : 
+                                    "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
                                     "text-gray-400 hover:bg-gray-750"}`
                             }
                         >
@@ -49,7 +49,7 @@ export default function ProblemPage(){
                             to={`/problem/${problem_id}/editorial`} 
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
-                                    "bg-gray-800 text-indigo-400 border-b-2 border-indigo-400" : 
+                                    "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
                                     "text-gray-400 hover:bg-gray-750"}`
                             }
                         >
@@ -59,7 +59,7 @@ export default function ProblemPage(){
                             to={`/problem/${problem_id}/solution`} 
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
-                                    "bg-gray-800 text-indigo-400 border-b-2 border-indigo-400" : 
+                                    "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
                                     "text-gray-400 hover:bg-gray-750"}`
                             }
                         >
@@ -69,11 +69,21 @@ export default function ProblemPage(){
                             to={`/problem/${problem_id}/submissions`} 
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
-                                    "text-indigo-400 border-b-2 border-indigo-400 bg-gray-800" : 
+                                    "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
                                     "text-gray-400 hover:bg-gray-750"}`
                             }
                         >
                             Submissions
+                        </NavLink>
+                        <NavLink 
+                            to={`/problem/${problem_id}/submissions`} 
+                            className={({ isActive }) => 
+                                `flex-1 flex items-center justify-center ${isActive ? 
+                                    "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
+                                    "text-gray-400 hover:bg-gray-750"}`
+                            }
+                        >
+                            Ask AI
                         </NavLink>
                     </div>
                     
@@ -84,18 +94,18 @@ export default function ProblemPage(){
                 </div>
 
                 {/* Right Side (55%) */}
-                <div className="h-full w-[55%] flex flex-col bg-gray-700 border-l border-gray-700">
+                <div className="h-full w-[55%] flex flex-col bg-gray-700 border-l ">
                     {/* Top Navigation Bar */}
-                    <div className="h-12 flex items-center justify-between px-4 bg-gray-700 border-b border-gray-700">
+                    <div className="h-12 flex items-center justify-between px-4 bg-gray-700 ">
                         <div>
                             <select 
                                 value={lang} 
                                 onChange={(e) => setlang(e.target.value)}
                                 className="bg-gray-700 text-gray-200 border border-gray-600 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             >
-                                <option value="C++">C++</option>
-                                <option value="Java">Java</option>
-                                <option value="Javascript">JavaScript</option>
+                                <option value="c++">C++</option>
+                                <option value="java">Java</option>
+                                <option value="javascript">JavaScript</option>
                             </select>
                         </div>
                         
@@ -116,8 +126,8 @@ export default function ProblemPage(){
                     {/* Editor Area */}
                     <div className='flex-1 overflow-hidden'>
                         {isActive === "code" && <CodeEditor editorRef={editorRef} lang={lang} problem={problem}/>}
-                        {isActive === "run" && <div className="h-full p-4 text-white">Run Code UI</div>}
-                        {isActive === "submit" && <div className="h-full p-4 text-white">Submit Code UI</div>}
+                        {isActive === "run" && <div className="h-full p-4 text-white">Run</div>}
+                        {isActive === "submit" && <div className="h-full p-4 text-white">Submit</div>}
                     </div>
                     
                     {/* Bottom Action Bar */}
