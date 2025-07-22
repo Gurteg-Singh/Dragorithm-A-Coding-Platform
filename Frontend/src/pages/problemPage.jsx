@@ -3,6 +3,8 @@ import { Link, NavLink, Outlet, useParams } from 'react-router';
 import { useEffect, useRef, useState } from 'react';
 import axiosClient from '../utils/axiosClient';
 import CodeEditor from '../components/codeEditor';
+import SubmitCode from '../components/submitCode';
+import Compilation from '../components/compilation';
 
 export default function ProblemPage(){
     const params = useParams();
@@ -76,7 +78,7 @@ export default function ProblemPage(){
                             Submissions
                         </NavLink>
                         <NavLink 
-                            to={`/problem/${problem_id}/submissions`} 
+                            to={`/problem/${problem_id}/ai`} 
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
                                     "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
@@ -115,7 +117,7 @@ export default function ProblemPage(){
                                 className={`px-3 py-1 rounded-md text-sm font-medium ${
                                     isActive === "code" 
                                         ? "bg-indigo-600 text-white" 
-                                        : "text-gray-400 hover:bg-gray-700"
+                                        : "bg-indigo-600 text-white"
                                 }`}
                             >
                                 Code
@@ -126,8 +128,8 @@ export default function ProblemPage(){
                     {/* Editor Area */}
                     <div className='flex-1 overflow-hidden'>
                         {isActive === "code" && <CodeEditor editorRef={editorRef} lang={lang} problem={problem}/>}
-                        {isActive === "run" && <div className="h-full p-4 text-white">Run</div>}
-                        {isActive === "submit" && <div className="h-full p-4 text-white">Submit</div>}
+                        {isActive === "run" && <Compilation/>}
+                        {isActive === "submit" && <SubmitCode/>}
                     </div>
                     
                     {/* Bottom Action Bar */}

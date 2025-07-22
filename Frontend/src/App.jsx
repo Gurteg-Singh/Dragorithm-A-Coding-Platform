@@ -12,6 +12,7 @@ import ProblemDescription from "./components/problemDescription";
 import ProblemEditorial from "./components/problemEditorial";
 import ProblemSolution from "./components/problemSolution";
 import ProblemSubmissions from "./components/problemSubmissions";
+import ProblemAI from "./components/problemAI";
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
           <Route path="editorial" element={<ProblemEditorial/>}></Route>
           <Route path="solution" element={<ProblemSolution/>}></Route>
           <Route path="submissions" element={<ProblemSubmissions/>}></Route>
+          <Route path="ai" element={<ProblemAI/>}></Route>
         </Route>
       </Routes>
     )
