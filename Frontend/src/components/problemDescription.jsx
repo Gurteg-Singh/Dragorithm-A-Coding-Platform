@@ -2,7 +2,7 @@ import { useOutletContext } from "react-router";
 import { useEffect } from "react";
 
 export default function ProblemDescription() {
-    const problem = useOutletContext();
+    const {problem} = useOutletContext();
     
     useEffect(() => {
         const style = document.createElement('style');

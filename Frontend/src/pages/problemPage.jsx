@@ -27,7 +27,7 @@ export default function ProblemPage(){
         }
         fetchProblemData();
     },[])
-    console.log(problem);
+
     return (
         <div className="h-screen w-screen flex flex-col bg-gray-700">
             <Navbar />
@@ -90,8 +90,8 @@ export default function ProblemPage(){
                     </div>
                     
                     {/* Content Area */}
-                    <div className="flex-1 overflow-y-auto p-4 text-gray-200">
-                        <Outlet context={problem} />
+                    <div className="flex-1 overflow-y-auto p-2 text-gray-200">
+                        <Outlet context={{problem,lang}} />
                     </div>
                 </div>
 
