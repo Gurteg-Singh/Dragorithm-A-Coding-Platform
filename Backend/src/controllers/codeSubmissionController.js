@@ -47,6 +47,7 @@ async function submitCode(req,res){
 
         const tokenString = codeTokens.join(',');
         const result = await submitToken(tokenString);
+        
 
         let status = "Accepted";
         let testCasesPassed = 0;
@@ -62,7 +63,7 @@ async function submitCode(req,res){
                 memory = Math.max(memory,ele.memory);
             }else{
                 status = "Wrong answer";
-                errorMessage = ele.stderr;
+                errorMessage = ele.compile_output;
                 break;
             }
         }
@@ -82,7 +83,9 @@ async function submitCode(req,res){
                 await req.result.save();
             }
         }
-        res.status(201).send(newSubmission);
+        console.log("i m here");
+        console.log(newSubmission);
+        res.status(201).json(newSubmission);
         
     }catch(err){
         res.send("Error : " + err.message);
