@@ -44,7 +44,16 @@ const submissionSchema = new mongoose.Schema({
   testCasesTotal: {  // Recommended addition
     type: Number,
     default: 0
-  }
+  },
+  failedInput:{
+    type:String
+  },
+  failedOutput:{
+    type:String
+  },
+  failedExpectedOutput:{
+    type:String
+  },
 }, { 
   timestamps: true
 });

@@ -54,6 +54,9 @@ async function submitCode(req,res){
         let runtime = 0;
         let memory = 0;
         let errorMessage=null;
+        let failedInput=null;
+        let failedOutput=null;
+        let failedExpectedOutput=null;
 
         for(const ele of result){
             if(ele.status_id === 3){
@@ -64,6 +67,9 @@ async function submitCode(req,res){
             }else{
                 status = "Wrong answer";
                 errorMessage = ele.compile_output;
+                failedInput = ele.stdin;
+                failedOutput= ele.stdout;
+                failedExpectedOutput= ele.expected_output;
                 break;
             }
         }
@@ -72,6 +78,9 @@ async function submitCode(req,res){
         newSubmission.runtime = runtime;
         newSubmission.memory = memory;
         newSubmission.testCasesPassed = testCasesPassed;
+        newSubmission.failedInput = failedInput;
+        newSubmission.failedOutput = failedOutput;
+        newSubmission.failedExpectedOutput = failedExpectedOutput;
 
 
         //Upadting and Saving the Submission
@@ -83,8 +92,7 @@ async function submitCode(req,res){
                 await req.result.save();
             }
         }
-        console.log("i m here");
-        console.log(newSubmission);
+        
         res.status(201).json(newSubmission);
         
     }catch(err){
@@ -128,7 +136,7 @@ async function runCode(req,res){
         const tokenString = codeTokens.join(',');
         const result = await submitToken(tokenString);
 
-
+        console.log(result);
         res.status(200).send(result);
         
     }catch(err){
