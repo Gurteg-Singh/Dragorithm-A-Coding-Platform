@@ -121,9 +121,10 @@ async function runCode(req,res){
         const codeTokens = submitResult.map((val)=>{
             return val.token;
         });
-
+        
         const tokenString = codeTokens.join(',');
         const result = await submitToken(tokenString);
+
 
         res.status(200).send(result);
         

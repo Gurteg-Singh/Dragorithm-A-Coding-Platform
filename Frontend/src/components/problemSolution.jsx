@@ -28,7 +28,7 @@ export default function ProblemSolution(){
 
 
     return(
-        <div className="h-full w-full flex justify-center items-center">
+        <div className="h-full w-full flex justify-start items-center">
             <Editor 
                 height="100%" 
                 width="100%" 
@@ -36,6 +36,12 @@ export default function ProblemSolution(){
                 defaultValue= {answer}
                 theme='vs-dark'
                 onMount={handleEditorDidMount}
+                options={{
+                readOnly: true,
+                minimap: { enabled: false },  // Optional: Hide minimap for cleaner view
+                lineNumbers: "on",            // Optional: Show line numbers
+                scrollBeyondLastLine: false  // Optional: Avoid extra space at the bottom
+    }}
             />
         </div>
     )

@@ -128,7 +128,7 @@ export default function ProblemPage(){
                     {/* Editor Area */}
                     <div className='flex-1 overflow-hidden'>
                         {isActive === "code" && <CodeEditor editorRef={editorRef} lang={lang} problem={problem}/>}
-                        {isActive === "run" && <Compilation/>}
+                        {isActive === "run" && <Compilation editorRef={editorRef} lang={lang} problem={problem}/>}
                         {isActive === "submit" && <SubmitCode/>}
                     </div>
                     
