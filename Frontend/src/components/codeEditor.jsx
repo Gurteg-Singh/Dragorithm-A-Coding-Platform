@@ -18,19 +18,12 @@ export default function CodeEditor({editorRef,lang,problem,codeRef,hasMounted}){
             }
             editorRef.current?.setValue(boilerPlate);
             hasMounted.current = true;
-            console.log("IN FILL EDITOR I HAVE SE BOILER PLATE AS IT WAS INITIAL MOUNT");
         }else{
-            console.log("IN FILL EDITOR I HAVE SET PRESERVED CODE AS IT WAS INITIAL MOUNT");
-            console.log(codeRef.current);
             editorRef.current?.setValue(codeRef.current);
-            const s = editorRef.current.getValue();
-            console.log(s);
         }
     }
 
     function handleEditorDidMount(editor, monacoInstance) {
-
-        console.log("I HAVE REACHED ON MOUNT");
 
         editorRef.current = editor;
         // Save monaco instance if you need it later
@@ -39,9 +32,7 @@ export default function CodeEditor({editorRef,lang,problem,codeRef,hasMounted}){
     }
 
     useEffect(() => {
-        console.log("I M IN USEFFECT");
         if (editorRef.current && monacoRef.current) {
-            console.log("i m setting code in use effct");
             const model = editorRef.current.getModel();
             const monacoLang = lang === "c++" ? "cpp" : lang.toLowerCase();
 
