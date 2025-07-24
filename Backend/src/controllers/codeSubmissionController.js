@@ -136,7 +136,6 @@ async function runCode(req,res){
         const tokenString = codeTokens.join(',');
         const result = await submitToken(tokenString);
 
-        console.log(result);
         res.status(200).send(result);
         
     }catch(err){

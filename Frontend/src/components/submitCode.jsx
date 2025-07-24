@@ -2,11 +2,11 @@ import {useState, useEffect} from "react";
 import {useParams} from "react-router";
 import axiosClient from "../utils/axiosClient";
 
-export default function SubmitCode({editorRef, lang, problem}){
+export default function SubmitCode({editorRef, lang, problem,codeRef}){
     const params = useParams();
     const problem_id = params.id;
     const language = lang;
-    const code = editorRef.current.getValue();
+    const code = codeRef.current;
     const [result, setResult] = useState(null);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ export default function SubmitCode({editorRef, lang, problem}){
                     
                     <div className="bg-neutral-750 rounded-lg p-4 text-center">
                         <p className="text-gray-400">Memory</p>
-                        <p className="text-2xl text-purple-400 font-bold">{data?.memory || 'N/A'} bytes</p>
+                        <p className="text-2xl text-purple-400 font-bold">{data?.memory || 'N/A'} KB</p>
                     </div>
                 </div>
             </div>

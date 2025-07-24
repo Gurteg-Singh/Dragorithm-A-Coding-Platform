@@ -15,6 +15,8 @@ export default function ProblemPage(){
     const [lang,setlang] = useState("c++");
     const [isActive,setisActive] = useState("code");
     const editorRef = useRef(null);
+    const codeRef = useRef("");
+    const hasMounted = useRef(false);
 
     useEffect(()=>{
         async function fetchProblemData(){
@@ -127,9 +129,9 @@ export default function ProblemPage(){
                     
                     {/* Editor Area */}
                     <div className='flex-1 overflow-hidden'>
-                        {isActive === "code" && <CodeEditor editorRef={editorRef} lang={lang} problem={problem}/>}
-                        {isActive === "run" && <Compilation editorRef={editorRef} lang={lang} problem={problem}/>}
-                        {isActive === "submit" && <SubmitCode editorRef={editorRef} lang={lang} problem={problem}/>}
+                        {isActive === "code" && problem?.code?.length > 0 && (<CodeEditor editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef} hasMounted={hasMounted}/>)}
+                        {isActive === "run" && <Compilation editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef}/>}
+                        {isActive === "submit" && <SubmitCode editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef}/>}
                     </div>
                     
                     {/* Bottom Action Bar */}

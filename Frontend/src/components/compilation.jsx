@@ -2,10 +2,10 @@ import { useParams } from "react-router";
 import axiosClient from "../utils/axiosClient";
 import { useEffect, useState } from "react";
 
-export default function Compilation({ editorRef, lang, problem }) {
+export default function Compilation({ editorRef, lang, problem,codeRef}) {
     const params = useParams();
     const problem_id = params.id;
-    const code = editorRef.current.getValue();
+    const code = codeRef.current;
     const language = lang;
     const testcases = problem?.visibleTestCasesForUser;
 
