@@ -13,6 +13,8 @@ import ProblemEditorial from "./components/problemEditorial";
 import ProblemSolution from "./components/problemSolution";
 import ProblemSubmissions from "./components/problemSubmissions";
 import ProblemAI from "./components/problemAI";
+import EditorialPanel from "./pages/editorialPanel";
+import EditorialUpload from "./pages/editorialUpload";
 
 function App() {
 
@@ -30,6 +32,8 @@ function App() {
         <Route path="/login" element={isAuthenticated ? <Navigate to="/"/> : <Login/>}/>
         <Route path="/admin" element={isAuthenticated ? user.role === 'admin' ? <AdminPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/createProblem" element={isAuthenticated ? user.role === 'admin' ? <CreateProblem/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
+        <Route path="/admin/editorial" element={isAuthenticated ? user.role === 'admin' ? <EditorialPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
+        <Route path="/admin/editorial/upload/:id" element={isAuthenticated ? user.role === 'admin' ? <EditorialUpload/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/problem/:id" element={isAuthenticated ? <ProblemPage/> : <Navigate to="/"/>}>
           <Route index element={<Navigate to="description" replace />}></Route>
           <Route path="description" element={<ProblemDescription/>}></Route>
