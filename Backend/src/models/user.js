@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     },
     problemSolved :{
         type : [mongoose.Schema.Types.ObjectId],
-        ref : 'problem'
+        ref : 'problem',
     }
 },{timestamps:true});
 
