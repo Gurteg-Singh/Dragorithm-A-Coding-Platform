@@ -7,6 +7,7 @@ const authRouter = require("./routes/userRoute");
 const problemRouter = require("./routes/problemRoute");
 const submissionRouter = require("./routes/codeSubmissionRoute");
 const cors = require('cors');
+const editorialRouter = require("./routes/editorialRoute");
 
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors({
 app.use("/user",authRouter);
 app.use("/problem",problemRouter);
 app.use("/submission",submissionRouter);
+app.use("/editorial",editorialRouter);
 
 async function startServer(){
     await Promise.all([main(),redisClient.connect()]);

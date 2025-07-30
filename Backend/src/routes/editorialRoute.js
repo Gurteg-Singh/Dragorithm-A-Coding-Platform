@@ -4,3 +4,5 @@ const editorialRouter = express.Router();
 const {getCloudUrl} = require("../controllers/editorialController");
 
 editorialRouter.get("/upload/:id",userVerification,adminVerification,getCloudUrl);
+
+module.exports = editorialRouter;

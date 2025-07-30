@@ -8,7 +8,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET_KEY
 });  
 
-async function getCloudUrl(){
+async function getCloudUrl(req,res){
     try{
       const problemId = req.params.id;
       const userId = req.result._id;
@@ -22,6 +22,11 @@ async function getCloudUrl(){
       // Generate unique public_id for the video
       const timestamp = Math.round(new Date().getTime() / 1000);
       const publicId = `dragorith-editorial/${problemId}/${userId}_${timestamp}`;
+
+      const uploadParams = {
+        timestamp : timestamp,
+        public_id : publicId
+      }
 
       const signature = cloudinary.utils.api_sign_request(
         uploadParams,
