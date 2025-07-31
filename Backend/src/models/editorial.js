@@ -4,7 +4,8 @@ const editorialSchema = mongoose.Schema({
     problemId:{
         type : mongoose.Schema.Types.ObjectId,
         ref : "problem",
-        required : true
+        required : true,
+        unique : true
     },
     userId : {
         type : mongoose.Schema.Types.ObjectId,

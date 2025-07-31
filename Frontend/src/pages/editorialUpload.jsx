@@ -32,6 +32,7 @@ export default function EditorialUpload(){
         clearErrors();
 
         try{
+            console.log("asking for url");
             const response = await axiosClient.get(`/editorial/upload/${problemId}`);
             const {signature,timestamp,publicId,api_key,cloud_name,upload_url} = response.data;
 
@@ -53,7 +54,7 @@ export default function EditorialUpload(){
                 setUploadProgress(progress);
                 },
             });
-            console.log(uploadResponse.data);
+            // console.log(uploadResponse.data);
             
             const metadata = {
                 problemId : problemId,
