@@ -1,3 +1,4 @@
+const Editorial = require('../models/editorial');
 const Problem = require('../models/problem');
 
 const cloudinary = require('cloudinary').v2;
@@ -21,11 +22,12 @@ async function getCloudUrl(req,res){
 
       // Generate unique public_id for the video
       const timestamp = Math.round(new Date().getTime() / 1000);
-      const publicId = `dragorith-editorial/${problemId}/${userId}_${timestamp}`;
+      const publicId = `dragorithm-editorial/${problemId}/${userId}_${timestamp}`;
 
       const uploadParams = {
         timestamp : timestamp,
-        public_id : publicId
+        public_id : publicId,
+        eager: 'so_1,w_480,c_scale/f_jpg'
       }
 
       const signature = cloudinary.utils.api_sign_request(
@@ -49,4 +51,40 @@ async function getCloudUrl(req,res){
   }
 }
 
-module.exports = {getCloudUrl}
+async function saveVideo(req,res){
+  try{
+    console.log("i m here");
+    const {problemId,publicId,duration,thumbnailUrl,secureUrl} = req.body;
+    const userId = req.result._id;
+
+    // Verify the upload with Cloudinary
+    const cloudinaryResource = await cloudinary.api.resource(
+      publicId,
+      { resource_type: 'video' }
+    );
+
+    if(!cloudinaryResource){
+      throw new Error("Video is not uploaded on cloud");
+    }
+
+    const vid = await Editorial.findOne({problemId,publicId});
+    console.log(vid);
+    if(vid){
+      throw new Error("Video already exist for this problem");
+    }
+
+    const result = await Editorial.create({problemId,publicId,userId,thumbnailUrl,secureUrl,duration});
+
+    res.status(200).json({
+      message : "Video uploaded and link stored",
+      videoUrl : result.secureUrl
+    })
+
+  }catch(err){
+    console.log("ERROR : " + err.message);
+  }
+
+
+}
+
+module.exports = {getCloudUrl,saveVideo}

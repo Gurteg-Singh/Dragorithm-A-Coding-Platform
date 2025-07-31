@@ -41,6 +41,8 @@ export default function EditorialUpload(){
             formData.append('timestamp', timestamp);
             formData.append('public_id', publicId);
             formData.append('api_key', api_key);
+            formData.append('eager', 'so_1,w_480,c_scale/f_jpg');
+
 
             const uploadResponse = await axios.post(upload_url, formData, {
                 headers: {
@@ -51,8 +53,18 @@ export default function EditorialUpload(){
                 setUploadProgress(progress);
                 },
             });
-
             console.log(uploadResponse.data);
+            
+            const metadata = {
+                problemId : problemId,
+                publicId : uploadResponse?.data?.public_id,
+                duration : uploadResponse?.data?.duration,
+                secureUrl : uploadResponse?.data?.secure_url,
+                thumbnailUrl : uploadResponse?.data?.eager?.[0].secure_url
+            }
+
+            const saveResponse = await axiosClient.post("/editorial/save",metadata);
+            console.log(saveResponse.data);
 
 
         }catch(err){
