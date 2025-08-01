@@ -11,7 +11,6 @@ cloudinary.config({
 
 async function getCloudUrl(req,res){
     try{
-      console.log("I M SENDING URL TO FRONTEND");
       const problemId = req.params.id;
       const userId = req.result._id;
 
@@ -21,9 +20,14 @@ async function getCloudUrl(req,res){
         throw new Error("Problem doesn't exist");
       }
 
+      const vid = await Editorial.findOne({problemId});
+
+      if(vid){
+        throw new Error("Video already exist for this problem");
+      }
+
       // Generate unique public_id for the video
       const timestamp = Math.round(new Date().getTime() / 1000);
-      console.log(timestamp);
       const publicId = `dragorithm-editorial/${problemId}/${userId}_${timestamp}`;
 
       const uploadParams = {
@@ -36,7 +40,6 @@ async function getCloudUrl(req,res){
         uploadParams,
         process.env.CLOUDINARY_SECRET_KEY
       );
-      console.log("GOT URL");
       // https://api.cloudinary.com/v1_1/<cloud_name>/<resource_type>/upload -- THIS IS URL STRUCTURE CLOUDINARY EXPECTS
       res.json({
         signature,
@@ -48,14 +51,12 @@ async function getCloudUrl(req,res){
       });
 
     }catch(err){
-      console.log(err.message);
-      res.status(400).send("ERROR : " + err.message);
+      res.status(401).json({ message: err.message });
   }
 }
 
 async function saveVideo(req,res){
   try{
-    console.log("READY TO SAVE VIDEO");
     const {problemId,publicId,duration,thumbnailUrl,secureUrl} = req.body;
     const userId = req.result._id;
 
@@ -68,16 +69,9 @@ async function saveVideo(req,res){
     if(!cloudinaryResource){
       throw new Error("Video is not uploaded on cloud");
     }
-    console.log("Problem id : ");
-    console.log(problemId);
-    console.log("public id : ");
-    console.log(publicId);
-
-    const arr = await Editorial.find({});
-    console.log(arr);
 
     const vid = await Editorial.findOne({problemId});
-    console.log(vid);
+
     if(vid){
       throw new Error("Video already exist for this problem");
     }
@@ -85,12 +79,13 @@ async function saveVideo(req,res){
     const result = await Editorial.create({problemId,publicId,userId,thumbnailUrl,secureUrl,duration});
 
     res.status(200).json({
-      message : "Video uploaded and link stored",
-      videoUrl : result.secureUrl
+      message : "Video uploaded Successfully",
+      videoUrl : result.secureUrl,
+      createdAt : result.createdAt
     })
 
   }catch(err){
-    console.log("ERROR : " + err.message);
+    res.status(401).json({ message: err.message });
   }
 
 
