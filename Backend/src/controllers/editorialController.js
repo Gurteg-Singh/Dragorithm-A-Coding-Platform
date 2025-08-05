@@ -91,4 +91,22 @@ async function saveVideo(req,res){
 
 }
 
-module.exports = {getCloudUrl,saveVideo}
+async function getEditorial(req,res){
+  try{
+    const problemId = req.params.id;
+    if(!problemId){
+      throw new Error("Problem id not found"); 
+    }
+
+    const vid = await Editorial.findOne({problemId});
+    if(!vid){
+      throw new Error("Problem not found");
+    }
+
+    res.status(200).send(vid);
+  }catch(err){
+    res.status(400).send("ERROR : " + err.message);
+  }
+}
+
+module.exports = {getCloudUrl,saveVideo,getEditorial}

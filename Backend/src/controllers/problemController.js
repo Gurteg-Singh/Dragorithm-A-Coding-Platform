@@ -2,6 +2,7 @@ const {validateProblemData,findLanguageId,submitBatch,submitToken,getErrorMessag
 const Submission = require("../models/codeSubmissions");
 const User = require("../models/user");  
 const Problem = require("../models/problem"); 
+const Editorial = require("../models/editorial");
 
 async function createProblem(req,res){
     try{
@@ -136,6 +137,7 @@ async function getProblem(req,res){
         if(!dsaproblem){
             throw new Error("ERROR : DSA problem is missing");
         }
+
 
         res.status(200).send(dsaproblem);
     }catch(err){

@@ -30,6 +30,7 @@ export default function ProblemPage(){
         fetchProblemData();
     },[])
 
+
     return (
         <div className="h-screen w-screen flex flex-col bg-gray-700">
             <Navbar />
