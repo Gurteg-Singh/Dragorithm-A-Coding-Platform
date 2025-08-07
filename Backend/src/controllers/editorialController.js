@@ -109,4 +109,25 @@ async function getEditorial(req,res){
   }
 }
 
-module.exports = {getCloudUrl,saveVideo,getEditorial}
+async function deleteEditorial(req,res){
+  try{
+    const problemId = req.params.id;
+    if(!problemId){
+      throw new Error("Problem Id not found");
+    }
+
+    const vid = await Editorial.findOneAndDelete({problemId});
+    if(!vid){
+      throw new Error("Editorial not found");
+    }
+
+    await cloudinary.uploader.destroy(vid?.publicId, { resource_type: 'video' , invalidate: true });
+
+    res.status(200).send("Video deleted successfully");
+
+  }catch(err){
+    res.status(400).json({message : err.message});
+  }
+}
+
+module.exports = {getCloudUrl,saveVideo,getEditorial,deleteEditorial}

@@ -64,7 +64,7 @@ export default function ProblemEditorial(){
             const hours = Math.floor(num/3600);
             const left = num%3600;
             const min = Math.floor(left/60);
-            const sec = left%60;
+            const sec = Math.floor(left%60);
             const str = `${hours}:${min}:${sec}`;
             return str;
         }else{

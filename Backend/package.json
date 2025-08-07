@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^1.13.0",
     "axios": "^1.9.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
