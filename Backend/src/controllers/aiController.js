@@ -1,7 +1,11 @@
-import { GoogleGenAI } from "@google/genai";
+const { GoogleGenAI } = require("@google/genai");
 
 async function aiChat(req,res){
   try{
+    const prompt = req.body?.prompt;
+    if(!prompt){
+      throw new Error("prompt not found");
+    }
     const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
 
     async function main() {
@@ -22,15 +26,19 @@ async function aiChat(req,res){
         ],
       });
 
-      const response1 = await chat.sendMessage({
-        message: "I have 2 dogs in my house.",
+      const response = await chat.sendMessage({
+        message: prompt,
       });
+
+      res.status(200).send(response.text);
     }
 
     await main();
   }catch(err){
-
+    console.log(err.message);
   }
 }
+
+module.exports = {aiChat};
 
 
