@@ -15,6 +15,7 @@ import ProblemSubmissions from "./components/problemSubmissions";
 import ProblemAI from "./components/problemAI";
 import EditorialPanel from "./pages/editorialPanel";
 import EditorialUpload from "./pages/editorialUpload";
+import LandingPage from "./pages/landingPage";
 
 function App() {
 
@@ -27,7 +28,7 @@ function App() {
 
     return(
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Home/> : <Navigate to="/login"/>}/>
+        <Route path="/" element={isAuthenticated ? <LandingPage/> : <Navigate to="/login"/>}/>
         <Route path="/signUp" element={isAuthenticated ? <Navigate to="/"/> : <SignUp/>}/>
         <Route path="/login" element={isAuthenticated ? <Navigate to="/"/> : <Login/>}/>
         <Route path="/admin" element={isAuthenticated ? user.role === 'admin' ? <AdminPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
