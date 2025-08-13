@@ -1,11 +1,12 @@
-import {useForm} from "react-hook-form";
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router";
 import { loginUser } from "../redux/userSlices/authSlice";
-import {useSelector,useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import Navbar from "../components/navbar";
 
 export default function Login() {
     const loginSchema = z.object({
@@ -22,135 +23,126 @@ export default function Login() {
         dispatch(loginUser(data));
     }
 
-    const {isAuthenticated,loading,error} = useSelector((state)=>state.auth);
+    const {isAuthenticated,loading} = useSelector((state)=>state.auth);
     const navigate = useNavigate();
     useEffect(()=>{
         if(isAuthenticated){
-            navigate("/");
+            navigate("/allProblems");
         }
     },[isAuthenticated,navigate]);
 
     if (loading) {
-        return <div className="h-screen flex items-center justify-center">Loading...</div>;
+        return (
+            <div className="min-h-screen bg-neutral-900 flex items-center justify-center">
+                <div className="text-white text-xl">Loading...</div>
+            </div>
+        );
     }
 
     return (
-        <div className="min-h-screen bg-white flex flex-col lg:flex-row">
-            {/* Left Side - Branding */}
-            <div className="w-full lg:w-1/2 bg-black flex flex-col items-center justify-center p-8">
-                <div className="max-w-md text-center">
-                    <div className="flex justify-center mb-8">
-                        <div className="w-48 h-48 rounded-full bg-blue-50 flex items-center justify-center">
-                            <div className="bg-gray-200 border-2 border-dashed rounded-xl w-32 h-32 flex items-center justify-center text-gray-500">
-                                {/* Replace with your logo */}
-                                <span className="text-2xl font-bold">D</span>
+        <div className="min-h-screen bg-neutral-900 flex flex-col">
+            <Navbar />
+            
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-center">
+                {/* Left Side - Branding */}
+                <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-8">
+                    <div className="max-w-lg text-center mb-10 lg:mb-0">
+                        <div className="flex justify-center mb-8">
+                            <img 
+                                src="https://res.cloudinary.com/dybdedi4e/image/upload/v1755042762/Dragorithm.435Z-removebg-preview_zjwxtc.png" 
+                                alt="Dragorithm Logo"
+                                className="w-40 h-40"
+                            />
+                        </div>
+                        
+                        <h1 className="text-5xl font-bold text-white mb-6">
+                            Welcome to <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">Dragorithm</span>
+                        </h1>
+                        
+                        <div className="space-y-6">
+                            <p className="text-2xl text-neutral-300">
+                                Where Algorithms Meet Excellence
+                            </p>
+                            
+                            <p className="text-xl text-neutral-400 italic">
+                                "The only way to learn to code is to code, and the best place is here."
+                            </p>
+                            
+                            <div className="flex justify-center mt-8">
+                                <div className="h-1 w-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <h1 className="text-4xl font-bold text-blue-600 mb-4">
-                        Welcome Back to <span className="text-red-600">Dragorithm</span>
-                    </h1>
-                    
-                    <p className="text-xl text-gray-600 mb-8">
-                        Continue your coding journey
-                    </p>
-                    
-                    <div className="grid grid-cols-2 gap-4 mb-10">
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                            <div className="text-blue-600 text-3xl font-bold mb-2">500+</div>
-                            <div className="text-gray-700">Coding Problems</div>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                            <div className="text-blue-600 text-3xl font-bold mb-2">98%</div>
-                            <div className="text-gray-700">Success Rate</div>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                            <div className="text-blue-600 text-3xl font-bold mb-2">24/7</div>
-                            <div className="text-gray-700">Community Support</div>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                            <div className="text-blue-600 text-3xl font-bold mb-2">10K+</div>
-                            <div className="text-gray-700">Active Coders</div>
-                        </div>
-                    </div>
-                    
-                    <div className="flex justify-center space-x-4">
-                        <div className="w-16 h-1 bg-blue-500 rounded-full"></div>
-                        <div className="w-16 h-1 bg-blue-300 rounded-full"></div>
-                        <div className="w-16 h-1 bg-blue-300 rounded-full"></div>
                     </div>
                 </div>
-            </div>
 
-            {/* Right Side - Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
-                <div className="w-full max-w-md bg-white border-1 border-blue-500 rounded-2xl shadow-lg shadow-blue-500 overflow-hidden">
-                    <div className="p-1"></div>
-                    <form onSubmit={handleSubmit(submitData)} className="p-8 space-y-6">
-                        <div className="text-center mb-6">
-                            <h2 className="text-3xl font-bold text-gray-800">Log In</h2>
-                            <p className="text-gray-600 mt-2">Access your coding dashboard</p>
-                        </div>
-                        
-                        <div>
-                            <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="email">
-                                Email Address
-                            </label>
-                            <input
-                                className={`w-full px-4 py-3 rounded-lg border ${
-                                    errors.email ? "border-red-500" : "border-gray-300"
-                                } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                                {...register('email')}
-                                type="email"
-                                placeholder="john.doe@example.com"
-                            />
-                            {errors.email && (
-                                <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-                            )}
-                        </div>
-                        
-                        <div>
-                            <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="password">
-                                Password
-                            </label>
-                            <input
-                                className={`w-full px-4 py-3 rounded-lg border ${
-                                    errors.password ? "border-red-500" : "border-gray-300"
-                                } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                                {...register('password')}
-                                type="password"
-                                placeholder="••••••••"
-                            />
-                            {errors.password && (
-                                <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
-                            )}
-                            
-                            <div className="flex justify-end mt-2">
-                                <a href="#" className="text-sm text-blue-600 hover:underline">
-                                    Forgot Password?
-                                </a>
+                {/* Right Side - Form */}
+                <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
+                    <div className="w-full max-w-md bg-neutral-800 rounded-2xl border border-neutral-700 shadow-lg overflow-hidden">
+                        <form onSubmit={handleSubmit(submitData)} className="p-8 space-y-6">
+                            <div className="text-center mb-6">
+                                <h2 className="text-3xl font-bold text-white">Log In</h2>
+                                <p className="text-neutral-400 mt-2">Continue your coding journey</p>
                             </div>
-                        </div>
-                        
-                        <div className="pt-3">
-                            <button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-medium py-3 px-4 rounded-lg shadow-md transition duration-300"
-                            >
-                                Log In
-                            </button>
-                        </div>
-                        
-                        <div className="text-center mt-6">
-                            <p className="text-gray-600 text-sm">
-                                Don't have an account?{" "}
-                                <Link to="/signUp" className="text-blue-600 font-medium hover:underline">
-                                    Sign up
-                                </Link>
-                            </p>
-                        </div>
-                    </form>
+                            
+                            <div>
+                                <label className="block text-neutral-300 text-sm font-medium mb-1" htmlFor="email">
+                                    Email Address
+                                </label>
+                                <input
+                                    className={`w-full px-4 py-3 rounded-lg bg-neutral-900 border ${
+                                        errors.email ? "border-red-500" : "border-neutral-700"
+                                    } text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                                    {...register('email')}
+                                    type="email"
+                                    placeholder="john.doe@example.com"
+                                />
+                                {errors.email && (
+                                    <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
+                                )}
+                            </div>
+                            
+                            <div>
+                                <label className="block text-neutral-300 text-sm font-medium mb-1" htmlFor="password">
+                                    Password
+                                </label>
+                                <input
+                                    className={`w-full px-4 py-3 rounded-lg bg-neutral-900 border ${
+                                        errors.password ? "border-red-500" : "border-neutral-700"
+                                    } text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
+                                    {...register('password')}
+                                    type="password"
+                                    placeholder="••••••••"
+                                />
+                                {errors.password && (
+                                    <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
+                                )}
+                                
+                                <div className="flex justify-end mt-2">
+                                    <a href="#" className="text-sm text-blue-400 hover:text-blue-300 hover:underline">
+                                        Forgot Password?
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div className="pt-3">
+                                <button
+                                    type="submit"
+                                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-4 rounded-lg shadow-md transition-all duration-300"
+                                >
+                                    Log In
+                                </button>
+                            </div>
+                            
+                            <div className="text-center mt-6">
+                                <p className="text-neutral-400 text-sm">
+                                    Don't have an account?{" "}
+                                    <Link to="/signUp" className="text-blue-400 font-medium hover:text-blue-300 hover:underline">
+                                        Sign up
+                                    </Link>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
