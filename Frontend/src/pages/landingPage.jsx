@@ -32,7 +32,7 @@ export default function LandingPage(){
     }, []);
 
     return(
-        <div className="custom-scrollbar w-full min-h-screen flex flex-col bg-neutral-900 relative">
+        <div className="custom-scrollbar w-full min-h-screen flex flex-col bg-neutral-900">
             <div className="min-h-screen w-full flex flex-col">
                 <Navbar/>
                 <div className="bg-neutral-900 w-full flex-1 text-white flex flex-col justify-center items-center gap-3 pb-8">

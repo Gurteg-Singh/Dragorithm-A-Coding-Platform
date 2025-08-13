@@ -3,10 +3,10 @@ import axiosClient from "../utils/axiosClient";
 import { Link } from "react-router";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { Search, X } from "lucide-react";
+import { Search, X, Edit, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-export default function EditorialPanel() {
+export default function UpdateDeletePanel() {
     const [problems, setProblems] = useState([]);
     const [filters, setFilters] = useState({
         name: "",
@@ -84,11 +84,11 @@ export default function EditorialPanel() {
                 {/* Header */}
                 <div className="w-[90%] max-w-6xl flex flex-col items-center mb-8 text-center">
                     <h1 className="text-4xl font-bold text-white mb-3" style={{ textShadow: '2px 2px 4px gray' }}>
-                        Editorial Management
+                        Problem Management
                     </h1>
                     <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full mb-4"></div>
                     <p className="text-xl text-neutral-300 max-w-2xl">
-                        Upload or remove editorial solutions for coding problems
+                        Update or delete coding problems from the platform
                     </p>
                 </div>
 
@@ -199,14 +199,16 @@ export default function EditorialPanel() {
                                         ))}
                                     </div>
                                     <div className="col-span-2 flex items-center justify-center gap-2">
-                                        <Link to={`/admin/editorial/upload/${val?._id}`}>
-                                            <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-lg text-sm hover:from-blue-700 hover:to-indigo-700 transition-colors">
-                                                Upload
+                                        <Link to={`/admin/updateProblem/${val?._id}`}>
+                                            <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-lg text-sm hover:from-blue-700 hover:to-indigo-700 transition-colors flex items-center gap-1">
+                                                <Edit className="h-4 w-4" />
+                                                Update
                                             </button>
                                         </Link>
-                                        <Link to={`/admin/editorial/remove/${val?._id}`}>
-                                            <button className="bg-gradient-to-r from-red-600 to-rose-600 text-white px-3 py-1 rounded-lg text-sm hover:from-red-700 hover:to-rose-700 transition-colors">
-                                                Remove
+                                        <Link to={`/admin/deleteProblem/${val?._id}`}>
+                                            <button className="bg-gradient-to-r from-red-600 to-rose-600 text-white px-3 py-1 rounded-lg text-sm hover:from-red-700 hover:to-rose-700 transition-colors flex items-center gap-1">
+                                                <Trash className="h-4 w-4" />
+                                                Delete
                                             </button>
                                         </Link>
                                     </div>
