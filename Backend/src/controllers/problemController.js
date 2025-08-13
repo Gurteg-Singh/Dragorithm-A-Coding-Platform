@@ -10,7 +10,6 @@ async function createProblem(req,res){
         const {title,description,difficultyLevel,tags,visibleTestCases,hiddenTestCases,code,solution} = req.body;
         
         for(const sol of solution){
-            console.log(sol.language);
             const langId = findLanguageId(sol.language);
             
             const src_code = sol.codeSolution;
@@ -64,6 +63,7 @@ async function updateProblem(req,res){
         }
 
         const dsaProblem = await Problem.findById(id);
+        
         if(!dsaProblem){
             throw new Error("DSA problem not found");
         }
@@ -133,7 +133,9 @@ async function getProblem(req,res){
         if(!id){
             throw new Error("ERROR : Id is missing");
         }
-        const dsaproblem = await Problem.findById(id).select('_id title description difficultyLevel tags visibleTestCases visibleTestCasesForUser code solution');
+        const dsaproblem = await Problem.findById(id).select('_id title description difficultyLevel tags visibleTestCases visibleTestCasesForUser hiddenTestCases code solution');
+        
+
         if(!dsaproblem){
             throw new Error("ERROR : DSA problem is missing");
         }

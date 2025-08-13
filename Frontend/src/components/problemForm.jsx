@@ -56,7 +56,7 @@ export default function ProblemForm({data}){
                 difficultyLevel : data?.difficultyLevel || "",
                 tags: data?.tags || [],
                 visibleTestCases : data?.visibleTestCases || [{input : "",output: "",explanation : ""}],
-                visibleTestCasesForUser : data?.visibleTestCases || [{input : "",output: ""}],
+                visibleTestCasesForUser : data?.visibleTestCasesForUser || [{input : "",output: ""}],
                 hiddenTestCases  : data?.hiddenTestCases || [{input : "",output : ""}],
                 code : data?.code || [{language : "C++",boilerPlateCode:""},{language : "Java",boilerPlateCode:""},{language : "Javascript",boilerPlateCode:""}],
                 solution : data?.solution || [{language : "C++",codeSolution:""},{language : "Java",codeSolution:""},{language : "Javascript",codeSolution:""}]
@@ -87,12 +87,20 @@ export default function ProblemForm({data}){
         name : "hiddenTestCases"
     });
     const navigate = useNavigate();
-    async function saveProblem(data){
+
+    async function saveProblem(d){
         try{
-            const result = await axiosClient.post('/problem/create',data);
-            alert("PROBLEM CREATED");
-            navigate("/");
+            if(data?.title === ""){
+                const result = await axiosClient.post('/problem/create',d);
+                alert("PROBLEM CREATED");
+                navigate("/allProblems");
+            }else{
+                const result = await axiosClient.patch(`/problem/update/${data?._id}`,d);
+                alert("PROBLEM UPDATED SUCCESFULLY");
+                navigate("/allProblems");
+            }
         }catch(err){
+            console.log(err.message);
             alert("AN ERROR OCCURED : " + err.message);
         }
     }

@@ -2,7 +2,7 @@ const axios = require('axios');
 
 
 function validateProblemData(data){
-    const musthave = ["title","description","difficultyLevel","tags","visibleTestCases","hiddenTestCases","code","solution"];
+    const musthave = ["title","description","difficultyLevel","tags","visibleTestCases","visibleTestCasesForUser","hiddenTestCases","code","solution"];
 
     const present = musthave.every((k)=> k in data);
     if(!present){
