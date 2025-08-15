@@ -35,13 +35,12 @@ export default function ProblemAI() {
     return (
         <div className="h-full w-full flex flex-col bg-neutral-900 rounded-xl border border-neutral-700 overflow-hidden">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-700 to-indigo-800 p-4 flex items-center">
-                <div className="bg-neutral-800 p-2 rounded-full mr-3">
-                    <Bot className="h-6 w-6 text-blue-400" />
+            <div className="bg-neutral-900 p-4 flex items-center border-b-2">
+                <div className="bg-white p-2 rounded-full mr-3">
+                    {/* <Bot className="h-6 w-6 text-blue-400" /> */}
                 </div>
                 <div>
                     <h2 className="text-lg font-bold text-white">AI Assistant: Drago</h2>
-                    <p className="text-neutral-300 text-sm">Solving problems for: {problem?.title}</p>
                 </div>
             </div>
             
@@ -73,21 +72,21 @@ export default function ProblemAI() {
                                 <div className="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl rounded-tr-none p-4 max-w-[80%]">
                                     <p className="text-white">{val?.parts[0]?.text}</p>
                                 </div>
-                                <div className="ml-3 mt-1 flex-shrink-0">
+                                {/* <div className="ml-3 mt-1 flex-shrink-0">
                                     <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-2 rounded-full">
                                         <User className="h-5 w-5 text-white" />
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         );
                     } else {
                         return (
                             <div key={index} className="flex mb-6">
-                                <div className="mr-3 mt-1 flex-shrink-0">
+                                {/* <div className="mr-3 mt-1 flex-shrink-0">
                                     <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-2 rounded-full">
                                         <Bot className="h-5 w-5 text-white" />
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="bg-neutral-800 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
                                     <p className="text-white">{val?.parts[0]?.text}</p>
                                 </div>
@@ -139,7 +138,7 @@ export default function ProblemAI() {
                     </div>
                     <button
                         type="submit"
-                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 p-3 rounded-xl flex-shrink-0"
+                        className="mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 p-3 rounded-xl flex-shrink-0"
                     >
                         <Send className="h-5 w-5 text-white" />
                     </button>

@@ -185,13 +185,15 @@ async function solutionsOfProblem(req,res) {
         const solutions = await Submission.find({userId : userId , problemId : problemId});
         
         if(solutions.length === 0){
-            return res.status(200).send("No submissions made yet.");
+            throw new Error("No Submissions yet made for this problem.")
         }
 
         res.status(200).send(solutions);
 
     }catch(err){
-        res.status(500).send("Internal Server Error");
+        res.status(400).json({
+            message : err.message
+        });
     }
 }
 
