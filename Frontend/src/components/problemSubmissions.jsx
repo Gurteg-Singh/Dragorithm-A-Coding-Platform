@@ -2,28 +2,26 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 import axiosClient from "../utils/axiosClient";
 
+export default function ProblemSubmissions() {
+    const { problem } = useOutletContext();
+    const [submissions, setSubmissions] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-export default function ProblemSubmissions(){
-
-    const {problem} = useOutletContext();
-    const [submissions,setsubmissions] = useState(null);
-    const [loading,setloading] = useState(false);
-    const [error,seterror] = useState(null);
-
-    useEffect(()=>{
-        setloading(true);
+    useEffect(() => {
+        setLoading(true);
         async function fetchSubmissions() {
-            try{
+            try {
                 const response = await axiosClient.get(`/problem/solutionsOfProblem/${problem?._id}`);
-                setsubmissions(response?.data);
-            }catch(err){
-                seterror(err?.response?.data?.message || 'Something went wrong');
-            }finally{
-                setloading(false);
+                setSubmissions(response?.data);
+            } catch (err) {
+                setError(err?.response?.data?.message || 'Something went wrong');
+            } finally {
+                setLoading(false);
             }
         }
         fetchSubmissions();
-    },[]);
+    }, [problem]);
 
     useEffect(() => {
         const style = document.createElement('style');
@@ -51,16 +49,76 @@ export default function ProblemSubmissions(){
         };
     }, []);
 
-    if(loading){
-        return(
-            <div className="text-white text-3xl flex items-center justify-center">Loading ...</div>
-        )
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-white text-xl">Loading submissions...</div>
+            </div>
+        );
     }
 
-    console.log(submissions);
-    return(
-        <div>
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-red-500 text-xl">{error}</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="h-full w-full flex flex-col bg-neutral-900 rounded-xl border border-neutral-800 overflow-hidden">
+            <div className="bg-neutral-800 p-4 border-b border-neutral-700">
+                <h2 className="text-lg font-bold text-white">My Submissions</h2>
+            </div>
             
+            <div className="flex-1 overflow-hidden flex flex-col">
+                {/* Table Header */}
+                <div className="grid grid-cols-12 gap-2 p-3 border-b border-neutral-700 bg-neutral-800">
+                    <div className="col-span-4 font-medium text-neutral-300">Time</div>
+                    <div className="col-span-2 font-medium text-neutral-300">Status</div>
+                    <div className="col-span-3 font-medium text-neutral-300">Language</div>
+                    <div className="col-span-2 font-medium text-neutral-300">Test Cases</div>
+                    <div className="col-span-1 font-medium text-neutral-300">Code</div>
+                </div>
+                
+                {/* Table Body */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar">
+                    {submissions.length === 0 ? (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-neutral-400">No submissions found</p>
+                        </div>
+                    ) : (
+                        submissions.map((val, index) => (
+                            <div 
+                                key={index}
+                                className={`grid grid-cols-12 gap-2 p-3 ${
+                                    index % 2 === 0 ? 'bg-neutral-900' : 'bg-neutral-900/50'
+                                } hover:bg-neutral-800 transition-colors`}
+                            >
+                                <div className="col-span-4 text-neutral-300 text-sm">
+                                    {new Date(val?.createdAt).toLocaleString()}
+                                </div>
+                                <div className={`col-span-2 font-medium ${
+                                    val?.status === 'Accepted' ? "text-green-500" : "text-red-500"
+                                }`}>
+                                    {val?.status}
+                                </div>
+                                <div className="col-span-3 text-neutral-300">
+                                    {val?.language}
+                                </div>
+                                <div className="col-span-2 text-neutral-300">
+                                    {val?.testCasesPassed}/{val?.testCasesTotal}
+                                </div>
+                                <div className="col-span-1">
+                                    <button className="text-blue-400 hover:text-blue-300 transition-colors">
+                                        View
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
         </div>
-    )
+    );
 }
