@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { registerUser } from "../redux/userSlices/authSlice";
 import { Link } from "react-router";
 import Navbar from "../components/navbar";
+import { clearAuthError } from "../redux/userSlices/authSlice";
 
 export default function SignUp() {
     const signUpSchema = z.object({
@@ -22,15 +23,23 @@ export default function SignUp() {
             .regex(/[^a-zA-Z0-9]/, "Password must contain at least one special character"),
     });
 
-    const {register, handleSubmit, formState: {errors}} = useForm({resolver: zodResolver(signUpSchema)});
+    const {register, handleSubmit, formState: {errors},watch} = useForm({
+        resolver: zodResolver(signUpSchema),
+        mode : "onChange"
+    });
+
     const dispatch = useDispatch();
     
     function submitData(data) {
         dispatch(registerUser(data));
     }
 
-    const {isAuthenticated, loading} = useSelector((state)=>state.auth);
+    const {isAuthenticated, loading,error} = useSelector((state)=>state.auth);
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        dispatch(clearAuthError());
+    },[]);
     
     useEffect(() => {
         if(isAuthenticated) {
@@ -158,6 +167,9 @@ export default function SignUp() {
                                 />
                                 {errors.password && (
                                     <p className="mt-1 text-xs text-red-400">{errors.password.message}</p>
+                                )}
+                                {error && (
+                                    <p className="mt-1 text-xs text-red-400">{error}</p>
                                 )}
                                 
                                 <div className="mt-2 p-2 bg-neutral-900/50 rounded-lg border border-neutral-700 text-xs">

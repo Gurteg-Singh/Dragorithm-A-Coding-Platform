@@ -8,7 +8,7 @@ export const registerUser = createAsyncThunk(
             const response = await axiosClient.post('/user/register',userData);
             return response.data.user;
         }catch(err){
-            const message = err.response?.data || err.message || 'Something went wrong';
+            const message = err.response?.data?.message || 'Something went wrong';
             return thunkAPI.rejectWithValue(message);
         }
     }
@@ -21,7 +21,7 @@ export const loginUser = createAsyncThunk(
             const response = await axiosClient.post('/user/login',userData);
             return response.data.user;
         }catch(err){
-            const message = err.response?.data || err.message || 'Something went wrong';
+            const message = err.response?.data?.message || 'Something went wrong';
             return thunkAPI.rejectWithValue(message);
         }
     }
@@ -34,7 +34,7 @@ export const checkUser = createAsyncThunk(
             const response = await axiosClient.get('/user/check');
             return response.data.user;
         }catch(err){
-            const message = err.response?.data || err.message || 'Something went wrong';
+            const message = err.response?.data?.message ||  'Something went wrong';
             return thunkAPI.rejectWithValue(message);
         }
     }
@@ -61,7 +61,11 @@ const authSlice = createSlice({
         error : null,
         loading : false
     },
-    reducers : {},
+    reducers : {
+        clearAuthError: (state) => {
+            state.error = null;
+        }
+    },
     extraReducers : (builder)=>{
         builder
         .addCase(registerUser.pending,(state,action)=>{
@@ -119,12 +123,12 @@ const authSlice = createSlice({
         .addCase(checkUser.rejected,(state,action)=>{
             state.loading = false;
             state.isAuthenticated = false;
-            state.error = action.payload;
         })
     }
 })
 
 const authReducer = authSlice.reducer;
+export const { clearAuthError } = authSlice.actions;
 export default authReducer;
 
 

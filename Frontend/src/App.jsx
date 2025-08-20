@@ -21,7 +21,7 @@ import UpdateProblem from "./pages/updateProblem";
 
 function App() {
 
-  const {isAuthenticated,user,loading} = useSelector((state)=> state.auth);
+  const {isAuthenticated,user} = useSelector((state)=> state.auth);
   const dispatch = useDispatch();
 
   useEffect(()=>{
@@ -32,8 +32,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage/>}/>
         <Route path="/allProblems" element={isAuthenticated ? <AllProblems/> : <Navigate to="/login"/>}/>
-        <Route path="/signUp" element={isAuthenticated ? <Navigate to="/"/> : <SignUp/>}/>
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/"/> : <Login/>}/>
+        <Route path="/signUp" element={isAuthenticated ? <Navigate to="/allProblems"/> : <SignUp/>}/>
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/allProblems"/> : <Login/>}/>
         <Route path="/admin" element={isAuthenticated ? user.role === 'admin' ? <AdminPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/createProblem" element={isAuthenticated ? user.role === 'admin' ? <CreateProblem/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/updateProblem/:id" element={isAuthenticated ? user.role === 'admin' ? <UpdateProblem/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>

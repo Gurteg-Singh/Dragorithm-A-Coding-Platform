@@ -11,6 +11,11 @@ async function register(req,res){
         const hashed = await bcrypt.hash(password, 10);
         req.body.password = hashed;
 
+        const alreadyExist = await User.findOne({email});
+        if(alreadyExist){
+            throw new Error("User already exist");
+        }
+
         req.body.role = "user";
         const newuser = await User.create(req.body);
 
@@ -29,7 +34,9 @@ async function register(req,res){
             message : "User registered successfully"
         })
     }catch(err){
-        res.status(400).send("ERROR" + err.message);
+        res.status(400).json({
+            message : err.message
+        });
     }
 }
 
@@ -37,17 +44,17 @@ async function login(req,res){
     try{
         const {email,password} = req.body;
         if(!email || !password){
-            throw new Error("ERROR : Invalid credentials");
+            throw new Error("Invalid credentials");
         }
 
         const user = await User.findOne({email : email});
         if(!user){
-            throw new Error("ERROR : Invalid credentials");
+            throw new Error("Invalid credentials");
         }
 
         const isValid = await bcrypt.compare(password,user.password);
         if(!isValid){
-            throw new Error("ERROR : Invalid credentials");
+            throw new Error("Invalid credentials");
         }
 
         const token = jwt.sign({_id:user._id,email : email,role:user.role},process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
@@ -66,7 +73,9 @@ async function login(req,res){
         })
 
     }catch(err){
-        res.status(400).send("ERROR" + err.message);
+        res.status(400).json({
+            message : err.message
+        });
     }
 }
 

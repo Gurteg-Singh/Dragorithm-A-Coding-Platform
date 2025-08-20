@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 import axiosClient from "../utils/axiosClient";
+import { X } from "lucide-react";
 
 export default function ProblemSubmissions() {
     const { problem } = useOutletContext();
     const [submissions, setSubmissions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [code,setcode] = useState(null);
 
     useEffect(() => {
         setLoading(true);
         async function fetchSubmissions() {
             try {
                 const response = await axiosClient.get(`/problem/solutionsOfProblem/${problem?._id}`);
-                setSubmissions(response?.data);
+                setSubmissions(
+                    response?.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                );
             } catch (err) {
                 setError(err?.response?.data?.message || 'Something went wrong');
             } finally {
@@ -110,7 +114,7 @@ export default function ProblemSubmissions() {
                                     {val?.testCasesPassed}/{val?.testCasesTotal}
                                 </div>
                                 <div className="col-span-1">
-                                    <button className="text-blue-400 hover:text-blue-300 transition-colors">
+                                    <button onClick={()=>{setcode(val?.code)}} className="text-blue-400 hover:text-blue-300 transition-colors">
                                         View
                                     </button>
                                 </div>
@@ -119,6 +123,40 @@ export default function ProblemSubmissions() {
                     )}
                 </div>
             </div>
+
+            {code && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-neutral-800 rounded-2xl border border-neutral-700 p-6 max-w-4xl w-full max-h-[80vh] flex flex-col shadow-xl">
+                        {/* Modal Header */}
+                        <div className="flex justify-between items-center mb-4 pb-3 border-b border-neutral-700">
+                            <h3 className="text-xl font-bold text-white">Submitted Code</h3>
+                            <button 
+                                onClick={() => setcode(null)} 
+                                className="p-1 hover:bg-neutral-700 rounded-full transition-colors"
+                            >
+                                <X className="h-6 w-6 text-neutral-400 hover:text-white" />
+                            </button>
+                        </div>
+                        
+                        {/* Code Content */}
+                        <div className="flex-1 overflow-auto bg-neutral-900 rounded-lg p-4">
+                            <pre className="text-sm text-neutral-200 whitespace-pre-wrap font-mono">
+                                <code>{code}</code>
+                            </pre>
+                        </div>
+                        
+                        {/* Footer */}
+                        <div className="mt-4 pt-3 border-t border-neutral-700 flex justify-end">
+                            <button 
+                                onClick={() => setcode(null)} 
+                                className="px-4 py-2 bg-neutral-700 hover:bg-neutral-600 text-white rounded-xl transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

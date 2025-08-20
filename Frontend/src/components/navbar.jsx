@@ -9,7 +9,6 @@ export default function Navbar() {
     const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     function handleLogOut() {
         dispatch(logOutUser())

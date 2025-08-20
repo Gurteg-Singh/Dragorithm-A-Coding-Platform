@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import Navbar from "../components/navbar";
+import { clearAuthError } from "../redux/userSlices/authSlice";
 
 export default function Login() {
     const loginSchema = z.object({
@@ -14,17 +15,23 @@ export default function Login() {
         password: z.string().min(1, "Password is required")
     });
 
-    const { register, handleSubmit, formState: { errors } } = useForm({ 
-        resolver: zodResolver(loginSchema) 
+    const { register, handleSubmit, formState: { errors } ,watch} = useForm({ 
+        resolver: zodResolver(loginSchema),
+        mode : "onChange"
     });
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
     function submitData(data) {
         dispatch(loginUser(data));
     }
 
-    const {isAuthenticated,loading} = useSelector((state)=>state.auth);
-    const navigate = useNavigate();
+    const {isAuthenticated,loading,error} = useSelector((state)=>state.auth);
+
+    useEffect(()=>{
+        dispatch(clearAuthError());
+    },[]);
+
     useEffect(()=>{
         if(isAuthenticated){
             navigate("/allProblems");
@@ -115,6 +122,9 @@ export default function Login() {
                                 />
                                 {errors.password && (
                                     <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
+                                )}
+                                {error && (
+                                    <p className="mt-1 text-sm text-red-400">{error}</p>
                                 )}
                                 
                                 <div className="flex justify-end mt-2">

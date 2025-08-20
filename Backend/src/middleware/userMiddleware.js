@@ -31,7 +31,9 @@ async function userVerification(req,res,next){
         req.extractedPayload = payload;
         next();
     }catch(err){
-        res.status(401).send("Error : "+ err.message)
+        res.status(401).json({
+            message : err.message
+        })
     }
 }
 
@@ -45,7 +47,9 @@ async function adminVerification(req,res,next){
         }
         next();
     }catch(err){
-        res.send("ERROR : " + err.message);
+        res.status(401).json({
+            message : err.message
+        })
     }
 }
 
