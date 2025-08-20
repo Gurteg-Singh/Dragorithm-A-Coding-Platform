@@ -6,7 +6,7 @@ function validateProblemData(data){
 
     const present = musthave.every((k)=> k in data);
     if(!present){
-        throw new Error("ERROR : Some fields are missing");
+        throw new Error("Some fields are missing");
     }
 }
 
@@ -25,7 +25,7 @@ async function fetchData(options) {
             const response = await axios.request(options);
             return response.data;
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 
@@ -84,17 +84,17 @@ async function submitToken(tokenString){
 
 function getErrorMessage(id){
     const statuses = {
-        "4" : "Wrong Answer",
-        "5" : "Time Limit Exceeded",
-        "6" : "Compilation Error",
-        "7" : "Runtime Error (SIGSEGV)",
-        "8" : "Runtime Error (SIGXFSZ)",
-        "9" : "Runtime Error (SIGFPE)",
-        "10" : "Runtime Error (SIGABRT)",
-        "11" : "Runtime Error (NZEC)",
-        "12" : "Runtime Error (Other)",
-        "13" : "Internal Error",
-        "14" : "Exec Format Error"
+        "4" : "Wrong Answer. Error in test cases or in logic of code solution",
+        "5" : "Time Limit Exceeded. Optimize code or decrease input size",
+        "6" : "Compilation Error. Solution Code not correct",
+        "7" : "Runtime Error (SIGSEGV). Solution Code not correct",
+        "8" : "Runtime Error (SIGXFSZ). Solution Code not correct",
+        "9" : "Runtime Error (SIGFPE). Solution Code not correct",
+        "10" : "Runtime Error (SIGABRT). Solution Code not correct",
+        "11" : "Runtime Error (NZEC). Solution Code not correct",
+        "12" : "Runtime Error (Other). Solution Code not correct",
+        "13" : "Internal Error. Judge0 server problem. Try after some time.",
+        "14" : "Exec Format Error. File format not valid for Judge0"
     }
 
     return statuses[id];

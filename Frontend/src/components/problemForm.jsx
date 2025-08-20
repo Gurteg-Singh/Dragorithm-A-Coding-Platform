@@ -3,9 +3,20 @@ import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import axiosClient from "../utils/axiosClient";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 
 
 export default function ProblemForm({data}){
+
+    const [error,seterror] = useState(null);
+    const [success,setsuccess] = useState(null);
+    const [loading,setloading] = useState(false);
+    const navigate = useNavigate();
+
+    function leavePage(){
+        setsuccess(null);
+        navigate('/allProblems');
+    }
 
     const validTags = ["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"];
     const languages = ["C++","Java","Javascript"];
@@ -86,35 +97,33 @@ export default function ProblemForm({data}){
         control,
         name : "hiddenTestCases"
     });
-    const navigate = useNavigate();
 
     async function saveProblem(d){
+        setloading(true);
         try{
             if(data?.title === ""){
                 const result = await axiosClient.post('/problem/create',d);
-                alert("PROBLEM CREATED");
-                navigate("/allProblems");
+                setloading(false);
+                setsuccess("Problem was created successfully.");
             }else{
                 const result = await axiosClient.patch(`/problem/update/${data?._id}`,d);
-                alert("PROBLEM UPDATED SUCCESFULLY");
-                navigate("/allProblems");
+                setloading(false);
+                setsuccess("Problem was updated successfully.");
             }
         }catch(err){
-            console.log(err.message);
-            alert("AN ERROR OCCURED : " + err.message);
+            seterror(err?.result?.data?.message || "Some Error Occured");
         }
     }
 
     return(
-        <div className="min-h-screen bg-gray-900 text-gray-100 p-4 sm:p-6">
-            <form onSubmit={handleSubmit(saveProblem)} className="max-w-7xl mx-auto bg-gray-800 rounded-xl shadow-lg p-6">
+        <div className="min-h-screen bg-neutral-900 text-gray-100 p-4 sm:p-6">
+            <form onSubmit={handleSubmit(saveProblem)} className="max-w-7xl mx-auto bg-neutral-800 rounded-xl shadow-lg p-6">
                 <h2 className="text-2xl font-bold mb-6 border-b border-gray-700 pb-3">
                     {data.title === "" ? "Create New Problem" : "Edit Problem"}
                 </h2>
                 
                 {/* Basic Information Section */}
                 <div className="mb-8">
-                    <h3 className="text-xl font-semibold mb-4 text-indigo-400">Basic Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Title */}
                         <div>
@@ -431,6 +440,7 @@ export default function ProblemForm({data}){
                 {/* Submit Button */}
                 <div className="flex justify-center">
                     <button
+                        disabled = {loading}
                         type="submit"
                         className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg"
                     >
@@ -438,6 +448,82 @@ export default function ProblemForm({data}){
                     </button>
                 </div>
             </form>
+
+            {loading && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-neutral-800 rounded-2xl border border-neutral-700 p-6 max-w-md w-full shadow-xl">
+                        <div className="text-center mb-6">
+                            <div className="w-12 h-12 bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <div className="animate-spin">
+                                    <svg className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">Processing</h3>
+                            <p className="text-neutral-300">Please wait while we process your request...</p>
+                        </div>
+                        
+                        <div className="flex justify-center">
+                            <div className="flex space-x-1">
+                                <div className="h-2 w-2 bg-neutral-400 rounded-full animate-bounce"></div>
+                                <div className="h-2 w-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                                <div className="h-2 w-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {error && (
+                <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-neutral-800 rounded-2xl border border-neutral-700 p-6 max-w-md w-full shadow-xl">
+                        <div className="text-center mb-6">
+                            <div className="w-12 h-12 bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">Error</h3>
+                            <p className="text-neutral-300">{error}</p>
+                        </div>
+                        
+                        <div className="flex justify-center">
+                            <button 
+                                onClick={() => seterror(null)} 
+                                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl transition-colors"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {success && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-neutral-800 rounded-2xl border border-neutral-700 p-6 max-w-md w-full shadow-xl">
+                        <div className="text-center mb-6">
+                            <div className="w-12 h-12 bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">Success</h3>
+                            <p className="text-neutral-300">{success}</p>
+                        </div>
+                        
+                        <div className="flex justify-center">
+                            <button 
+                                onClick={leavePage} 
+                                className="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl transition-colors"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
         </div>
     );
 }

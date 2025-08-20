@@ -31,13 +31,13 @@ async function createProblem(req,res){
 
             const tokenString = codeTokens.join(',');
             const result = await submitToken(tokenString);
+            // console.log(result);
 
 
             for(const ele of result){
                 if(ele.status_id !== 3){
                     const message = getErrorMessage(ele.status_id);
-                    console.log(message);
-                    return res.status(400).send("ERROR : " + message);
+                    throw new Error(message);
 
                 }
             }
@@ -50,13 +50,15 @@ async function createProblem(req,res){
         res.status(201).send("Problem created successfully");
         
     }catch(err){
-        console.log(err);
-        res.status(400).send("ERROR : " + err.message);
+        res.status(400).json({
+            message : err.message
+        });
     }
 }
 
 async function updateProblem(req,res){
     try{
+        console.log("hello");
         const id = req.params.id;
         if(!id){
             throw new Error("Id is missing");
@@ -96,7 +98,7 @@ async function updateProblem(req,res){
             for(const ele of result){
                 if(ele.status_id !== 3){
                     const message = getErrorMessage(ele.status_id);
-                    return res.status(400).send("ERROR : " + message);
+                    throw new Error(message);
                 }
             }
         }
@@ -106,7 +108,9 @@ async function updateProblem(req,res){
         res.status(200).send(newProblem);
 
     }catch(err){
-        res.status(501).send("ERROR : " + err.message);
+        res.status(501).json({
+            message : err.message
+        })
     }
 }
 
