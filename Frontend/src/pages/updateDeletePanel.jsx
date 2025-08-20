@@ -12,6 +12,10 @@ export default function UpdateDeletePanel() {
         name: "",
         tag: "all"
     });
+    const [remove,setremove] = useState(null);
+    const [removeFail,setremoveFail] = useState(null);
+    const [removePass,setremovePass] = useState(null);
+    const [refresh,setrefresh] = useState(true);
     
     const { register, handleSubmit, reset, watch } = useForm({
         defaultValues: {
@@ -20,6 +24,16 @@ export default function UpdateDeletePanel() {
     });
     
     const searchTerm = watch("searchTerm");
+
+    async function delProblem(id){
+        try{
+            const response = await axiosClient.delete(`/problem/delete/${id}`);
+            setremovePass(response?.data);
+            setrefresh(!refresh);
+        }catch(err){
+            setremoveFail(err?.response?.data?.message || "An Error Occured"); 
+        }
+    }
 
     // Add custom scrollbar effect
     useEffect(() => {
@@ -58,7 +72,7 @@ export default function UpdateDeletePanel() {
             }
         }
         fetchProblems();
-    }, []);
+    }, [refresh]);
 
     const filteredProblems = problems.filter(problem => {
         const nameMatch = problem.title.toLowerCase().includes(filters.name.toLowerCase());
@@ -205,12 +219,11 @@ export default function UpdateDeletePanel() {
                                                 Update
                                             </button>
                                         </Link>
-                                        <Link to={`/admin/deleteProblem/${val?._id}`}>
-                                            <button className="bg-gradient-to-r from-red-600 to-rose-600 text-white px-3 py-1 rounded-lg text-sm hover:from-red-700 hover:to-rose-700 transition-colors flex items-center gap-1">
-                                                <Trash className="h-4 w-4" />
-                                                Delete
-                                            </button>
-                                        </Link>
+                                        <button onClick={()=>{setremove(val)}} className="bg-gradient-to-r from-red-600 to-rose-600 text-white px-3 py-1 rounded-lg text-sm hover:from-red-700 hover:to-rose-700 transition-colors flex items-center gap-1">
+                                            <Trash className="h-4 w-4" />
+                                            Delete
+                                        </button>
+                                        
                                     </div>
                                 </div>
                             ))
@@ -224,6 +237,44 @@ export default function UpdateDeletePanel() {
             </div>
             
             <Footer />
+
+            {/* Deletion window */}
+            {remove && (
+                <div className="fixed inset-0  backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-neutral-800 rounded-2xl border border-neutral-700 p-6 max-w-md w-full shadow-xl">
+                        <div className="text-center mb-6">
+                            <h3 className="text-xl font-bold text-white mb-2">Confirm Deletion</h3>
+                            <p className="text-neutral-300">{`Are you sure you want to delete "${remove?.title}" problem ?`}</p>
+                            <p className="text-neutral-400 text-sm mt-2">This action cannot be undone.</p>
+                        </div>
+                        
+                        <div className="flex gap-4 justify-center">
+                            <button 
+                                onClick={() => {setremove(null),setremoveFail(null),setremovePass(null)}} 
+                                className="flex-1 py-2 px-4 bg-neutral-700 hover:bg-neutral-600 text-white rounded-xl transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={()=>{delProblem(remove?._id)}} 
+                                className="flex-1 py-2 px-4 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white rounded-xl transition-colors"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                        {removeFail && 
+                            <div className="text-white flex items-center justify-center text-xs font-bold mt-2">
+                                {removeFail}
+                            </div>
+                        }
+                        {removePass && 
+                            <div className="text-white flex items-center justify-center text-xs font-bold mt-2">
+                                {removePass}
+                            </div>
+                        }
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

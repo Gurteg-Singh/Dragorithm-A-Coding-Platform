@@ -95,6 +95,12 @@ const problemSchema = mongoose.Schema({
     }
 },{timestamps : true});
 
+problemSchema.post('findOneAndDelete', async function (problemInfo) {
+    if (problemInfo) {
+        await mongoose.model('submission').deleteMany({ problemId: problemInfo._id });
+    }
+});
+
 const Problem  = mongoose.model("problem",problemSchema);
 
 module.exports = Problem;

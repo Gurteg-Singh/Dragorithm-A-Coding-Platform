@@ -123,7 +123,9 @@ async function deleteProblem(req,res){
         }
         res.status(200).send("Successfully Deleted");
     }catch(err){
-        res.status(500).send("ERROR : " + err.message);
+        res.status(500).json({
+            message : err.message
+        });
     }
 }
 

@@ -118,7 +118,7 @@ async function deleteEditorial(req,res){
 
     const vid = await Editorial.findOneAndDelete({problemId});
     if(!vid){
-      throw new Error("Editorial not found");
+      throw new Error("No editorial was found for this problem");
     }
 
     await cloudinary.uploader.destroy(vid?.publicId, { resource_type: 'video' , invalidate: true });

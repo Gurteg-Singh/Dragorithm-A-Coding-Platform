@@ -41,44 +41,47 @@ export default function LandingPage() {
     }, []);
 
     return(
-        <div className="custom-scrollbar w-full min-h-screen flex flex-col bg-neutral-900">
-            {/* Navbar */}
-            <Navbar/>
-            
-            {/* Hero Section */}
-            <div className="min-h-screen w-full flex flex-col relative overflow-hidden pt-16">
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600 rounded-full filter blur-[100px] opacity-20"></div>
-                    <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-blue-600 rounded-full filter blur-[120px] opacity-15"></div>
-                </div>
+        <div className="custom-scrollbar w-full flex flex-col bg-neutral-900">
+            {/* Viewport Container */}
+            <div className="min-h-screen w-full flex flex-col">
+                {/* Navbar */}
+                <Navbar/>
                 
-                <div className="flex-1 flex flex-col justify-center items-center gap-6 pb-8 px-4 relative z-10">
-                    <div className="text-center max-w-4xl">
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-                            Conquer Data Structure & Algorithms
-                        </h1>
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">
-                            Ace Your Coding Interviews
-                        </h2>
-                        <p className="text-base md:text-xl text-neutral-300 mb-4">
-                            Dragorithm offers challenges from beginner basics to advanced algorithmic concepts for real-world problem solving.
-                        </p>
-                        <p className="text-base md:text-xl text-neutral-300 mb-8">
-                            Sharpen your logic, track progress, and code with skillful confidence.
-                        </p>
+                {/* Hero Section - Takes remaining viewport height */}
+                <div className="flex-1 flex flex-col relative overflow-hidden">
+                    <div className="absolute inset-0 z-0">
+                        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600 rounded-full filter blur-[100px] opacity-20"></div>
+                        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-blue-600 rounded-full filter blur-[120px] opacity-15"></div>
                     </div>
                     
-                    <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <NavLink to="/problems">
-                            <button className="px-6 py-3 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-base sm:text-lg font-medium rounded-xl hover:from-blue-700 hover:to-indigo-800 transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-500/20">
-                                Get Started
-                            </button>
-                        </NavLink>
-                        <NavLink to="/about">
-                            <button className="px-6 py-3 sm:px-8 sm:py-3 border-2 border-white text-white text-base sm:text-lg font-medium rounded-xl hover:bg-white/10 transition-all">
-                                Learn More
-                            </button>
-                        </NavLink>
+                    <div className="flex-1 flex flex-col justify-center items-center gap-6 pb-8 px-4 relative z-10">
+                        <div className="text-center max-w-4xl">
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+                                Conquer Data Structure & Algorithms
+                            </h1>
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">
+                                Ace Your Coding Interviews
+                            </h2>
+                            <p className="text-base md:text-xl text-neutral-300 mb-4">
+                                Dragorithm offers challenges from beginner basics to advanced algorithmic concepts for real-world problem solving.
+                            </p>
+                            <p className="text-base md:text-xl text-neutral-300 mb-8">
+                                Sharpen your logic, track progress, and code with skillful confidence.
+                            </p>
+                        </div>
+                        
+                        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                            <NavLink to="/problems">
+                                <button className="px-6 py-3 sm:px-8 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-base sm:text-lg font-medium rounded-xl hover:from-blue-700 hover:to-indigo-800 transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-500/20">
+                                    Get Started
+                                </button>
+                            </NavLink>
+                            <NavLink to="/about">
+                                <button className="px-6 py-3 sm:px-8 sm:py-3 border-2 border-white text-white text-base sm:text-lg font-medium rounded-xl hover:bg-white/10 transition-all">
+                                    Learn More
+                                </button>
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
