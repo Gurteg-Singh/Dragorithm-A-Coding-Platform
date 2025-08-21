@@ -102,15 +102,25 @@ async function adminRegister(req,res){
     try{
         registervalidation(req.body);
         const {firstName,email,password} = req.body;
+
+        const alreadyExist = await User.findOne({email});
+        if(alreadyExist){
+            throw new Error("Admin already exists.")
+        }
+
         const hashed = await bcrypt.hash(password, 10);
         req.body.password = hashed;
 
         req.body.role = "admin";
         const newuser = await User.create(req.body);
 
-        res.status(201).send("New Admin Registered Successfully");
+        res.status(201).json({
+            message : "New admin created successfully"
+        });
     }catch(err){
-        res.status(400).send("ERROR : " + err.message);
+        res.status(400).json({
+            message : err.message
+        });
     }
 }
 

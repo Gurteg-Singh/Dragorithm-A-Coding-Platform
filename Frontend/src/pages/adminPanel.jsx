@@ -29,7 +29,7 @@ export default function AdminPanel() {
         {
             title: "New Admin",
             description: "Create a new admin account.",
-            nav: "",
+            nav: "/admin/newAdmin",
             icon: UserPlus,
             color: "from-amber-600 to-orange-600"
         }

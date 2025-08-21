@@ -17,6 +17,7 @@ export default function ProblemPage(){
     const editorRef = useRef(null);
     const codeRef = useRef("");
     const hasMounted = useRef(false);
+    const [running,setrunning] = useState(false);
 
     useEffect(()=>{
         async function fetchProblemData(){
@@ -116,7 +117,7 @@ export default function ProblemPage(){
                         
                         <div className="flex space-x-2">
                             <button 
-                                onClick={() => setisActive("code")}
+                                onClick={() => {setisActive("code"),setrunning(false)}}
                                 className={`px-3 py-1 rounded-md text-sm font-medium ${
                                     isActive === "code" 
                                         ? "bg-indigo-600 text-white" 
@@ -131,20 +132,22 @@ export default function ProblemPage(){
                     {/* Editor Area */}
                     <div className='flex-1 overflow-hidden'>
                         {isActive === "code" && problem?.code?.length > 0 && (<CodeEditor editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef} hasMounted={hasMounted}/>)}
-                        {isActive === "run" && <Compilation editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef}/>}
-                        {isActive === "submit" && <SubmitCode editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef}/>}
+                        {isActive === "run" && <Compilation running={running} setrunning={setrunning} editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef}/>}
+                        {isActive === "submit" && <SubmitCode running={running} setrunning={setrunning}  editorRef={editorRef} lang={lang} problem={problem} codeRef={codeRef}/>}
                     </div>
                     
                     {/* Bottom Action Bar */}
                     <div className='h-12 flex items-center justify-end px-4 bg-gray-700'>
-                        <button 
-                            onClick={() => setisActive("run")}
+                        <button
+                            disabled={running}
+                            onClick={() => {setisActive("run"),setrunning(true)}}
                             className="px-4 py-2 mr-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md text-sm font-medium transition"
                         >
                             Run
                         </button>
-                        <button 
-                            onClick={() => setisActive("submit")}
+                        <button
+                            disabled={running}
+                            onClick={() => {setisActive("submit"),setrunning(true)}}
                             className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition"
                         >
                             Submit

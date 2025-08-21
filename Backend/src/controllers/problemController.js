@@ -58,7 +58,6 @@ async function createProblem(req,res){
 
 async function updateProblem(req,res){
     try{
-        console.log("hello");
         const id = req.params.id;
         if(!id){
             throw new Error("Id is missing");

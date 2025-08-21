@@ -18,6 +18,7 @@ import EditorialUpload from "./pages/editorialUpload";
 import LandingPage from "./pages/landingPage";
 import UpdateDeletePanel from "./pages/updateDeletePanel";
 import UpdateProblem from "./pages/updateProblem";
+import NewAdmin from "./pages/newAdmin";
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="/admin/createProblem" element={isAuthenticated ? user.role === 'admin' ? <CreateProblem/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/updateProblem/:id" element={isAuthenticated ? user.role === 'admin' ? <UpdateProblem/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/editorial" element={isAuthenticated ? user.role === 'admin' ? <EditorialPanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
+        <Route path="/admin/newAdmin" element={isAuthenticated ? user.role === 'admin' ? <NewAdmin/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/updateOrDeleteProblem" element={isAuthenticated ? user.role === 'admin' ? <UpdateDeletePanel/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/admin/editorial/upload/:id" element={isAuthenticated ? user.role === 'admin' ? <EditorialUpload/> : <Navigate to="/"/> : <Navigate to="/login"/>}/>
         <Route path="/problem/:id" element={isAuthenticated ? <ProblemPage/> : <Navigate to="/"/>}>

@@ -15,7 +15,7 @@ export default function ProblemForm({data}){
 
     function leavePage(){
         setsuccess(null);
-        navigate('/allProblems');
+        navigate('/admin');
     }
 
     const validTags = ["Arrays","Linked List","Graphs","Stacks","Queues","Binary Trees","Binary Search Trees","Dynamic Programming","Strings"];
@@ -111,7 +111,7 @@ export default function ProblemForm({data}){
                 setsuccess("Problem was updated successfully.");
             }
         }catch(err){
-            seterror(err?.result?.data?.message || "Some Error Occured");
+            seterror(err?.response?.data?.message || "Some Error Occured");
         }
     }
 

@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {useParams} from "react-router";
 import axiosClient from "../utils/axiosClient";
 
-export default function SubmitCode({editorRef, lang, problem,codeRef}){
+export default function SubmitCode({editorRef, lang, problem,codeRef,setrunning}){
     const params = useParams();
     const problem_id = params.id;
     const language = lang;
@@ -20,6 +20,8 @@ export default function SubmitCode({editorRef, lang, problem,codeRef}){
                     status: "Error",
                     errorMessage: "Failed to submit solution. Please try again."
                 });
+            }finally{
+                setrunning(false);
             }
         }
         subCode();

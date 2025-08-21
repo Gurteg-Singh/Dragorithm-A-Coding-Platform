@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import axiosClient from "../utils/axiosClient";
 import { useEffect, useState } from "react";
 
-export default function Compilation({ editorRef, lang, problem,codeRef}) {
+export default function Compilation({ editorRef, lang, problem,codeRef,setrunning}) {
     const params = useParams();
     const problem_id = params.id;
     const code = codeRef.current;
@@ -13,8 +13,14 @@ export default function Compilation({ editorRef, lang, problem,codeRef}) {
 
     useEffect(() => {
         async function runCode() {
-            const response = await axiosClient.post(`/submission/run/${problem_id}`, { code, language });
-            setResults(response?.data || []);
+            try{
+                const response = await axiosClient.post(`/submission/run/${problem_id}`, { code, language });
+                setResults(response?.data || []);
+            }catch(err){
+                console.log(err);
+            }finally{
+                setrunning(false);
+            }
         }
         runCode();
     }, []);
