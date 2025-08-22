@@ -21,7 +21,7 @@ export default function ProblemAI() {
 
     async function getAnswer(d) {
         async function fetchreply(d) {
-            const response = await axiosClient.post("/ai/chat", d);
+            const response = await axiosClient.post("/ai/chat", {...d,...problem});
             const reply = response.data;
             setThinking(false);
             setMessages((prev) => [...prev, { role: "model", parts: [{ text: reply }] }]);

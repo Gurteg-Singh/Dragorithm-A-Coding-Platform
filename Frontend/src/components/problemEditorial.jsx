@@ -8,6 +8,8 @@ export default function ProblemEditorial() {
     const problemId = params.id;
 
     const [editorialData, setEditorialData] = useState(null);
+    const [loading,setloading] = useState(false);
+    const [error,seterror] = useState(null);
     const videoRef = useRef(null);
     const [isHovering, setIsHovering] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -15,9 +17,16 @@ export default function ProblemEditorial() {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await axiosClient.get(`/editorial/getEditorial/${problemId}`);
-            setEditorialData(response?.data);
+            try{
+                const response = await axiosClient.get(`/editorial/getEditorial/${problemId}`);
+                setloading(false);
+                setEditorialData(response?.data);
+            }catch(err){
+                setloading(false);
+                seterror(err?.response?.data?.message || "No editorail available for this problem");
+            }
         }
+        setloading(true);
         fetchData();
     }, [problemId]);
 
@@ -63,13 +72,33 @@ export default function ProblemEditorial() {
             : `${m}:${s.toString().padStart(2, '0')}`;
     }
 
-    if (!editorialData) {
+
+    if (error) {
         return (
-            <div className="flex items-center justify-center h-full text-xl text-neutral-300">
-                Loading solution video...
+            <div className="w-full h-full flex flex-col justify-center items-center bg-neutral-900 text-white p-4">
+                <div className="mb-4">
+                    <svg className="h-12 w-12 text-neutral-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <p className="text-neutral-300 text-center">No editorial available for this problem.</p>
             </div>
         );
     }
+
+    if (loading || !editorialData) {
+        return (
+            <div className="w-full h-full flex flex-col justify-center items-center bg-neutral-900 text-white">
+                <div className="flex space-x-2 mb-4">
+                    <div className="h-3 w-3 bg-blue-500 rounded-full animate-bounce"></div>
+                    <div className="h-3 w-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+                    <div className="h-3 w-3 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></div>
+                </div>
+                <p className="text-neutral-300">Loading the editorial...</p>
+            </div>
+        );
+    }
+
 
     return (
         <div className="flex flex-col h-full w-full bg-neutral-900 rounded-xl border border-neutral-800 overflow-hidden">
@@ -85,7 +114,7 @@ export default function ProblemEditorial() {
                 >
                     <video 
                         ref={videoRef} 
-                        src={editorialData.secureUrl} 
+                        src={editorialData?.secureUrl} 
                         poster={editorialData.thumbnailUrl}
                         className="w-full rounded-lg aspect-video bg-black"
                     />

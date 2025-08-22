@@ -42,7 +42,8 @@ export default function ProblemPage(){
                     {/* Navigation Tabs */}
                     <div className="h-12 flex bg-gray-700">
                         <NavLink 
-                            to={`/problem/${problem_id}/description`} 
+                            to={`/problem/${problem_id}/description`}
+                            replace
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
                                     "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
@@ -52,7 +53,8 @@ export default function ProblemPage(){
                             Description
                         </NavLink>
                         <NavLink 
-                            to={`/problem/${problem_id}/editorial`} 
+                            to={`/problem/${problem_id}/editorial`}
+                            replace
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
                                     "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
@@ -62,7 +64,8 @@ export default function ProblemPage(){
                             Editorial
                         </NavLink>
                         <NavLink 
-                            to={`/problem/${problem_id}/solution`} 
+                            to={`/problem/${problem_id}/solution`}
+                            replace 
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
                                     "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
@@ -72,7 +75,8 @@ export default function ProblemPage(){
                             Solution
                         </NavLink>
                         <NavLink 
-                            to={`/problem/${problem_id}/submissions`} 
+                            to={`/problem/${problem_id}/submissions`}
+                            replace 
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
                                     "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 
@@ -82,7 +86,8 @@ export default function ProblemPage(){
                             Submissions
                         </NavLink>
                         <NavLink 
-                            to={`/problem/${problem_id}/ai`} 
+                            to={`/problem/${problem_id}/ai`}
+                            replace
                             className={({ isActive }) => 
                                 `flex-1 flex items-center justify-center ${isActive ? 
                                     "bg-neutral-800 text-indigo-400 border-2 border-indigo-400 border-b-0" : 

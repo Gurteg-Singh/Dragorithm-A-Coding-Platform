@@ -100,12 +100,14 @@ async function getEditorial(req,res){
 
     const vid = await Editorial.findOne({problemId});
     if(!vid){
-      throw new Error("Problem not found");
+      throw new Error("There is no editorial for this problem");
     }
 
     res.status(200).send(vid);
   }catch(err){
-    res.status(400).send("ERROR : " + err.message);
+    res.status(400).json({
+      message : err.message
+    });
   }
 }
 
