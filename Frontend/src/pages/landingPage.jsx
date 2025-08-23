@@ -6,52 +6,107 @@ import Footer from "../components/footer";
 export default function LandingPage() {
 
     useEffect(() => {
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .custom-scrollbar::-webkit-scrollbar {
-                width: 10px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-track {
-                background: #2a2a2a;
-                border-radius: 5px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #3d3d3d;
-                border-radius: 5px;
-                border: 2px solid #2a2a2a;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #4a4a4a;
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            .fade-in {
-                animation: fadeIn 0.8s ease-out forwards;
-            }
-        `;
-        document.head.appendChild(style);
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3d3d3d;
+            border-radius: 5px;
+            border: 2px solid #2a2a2a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4a4a4a;
+        }
         
-        return () => {
-            document.head.removeChild(style);
-        };
-    }, []);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* Background animation styles */
+        @keyframes gradient-x {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.25; transform: scale(1.05); }
+        }
+        @keyframes pulse-slower {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(1.03); }
+        }
+        .animate-gradient-x {
+            background-size: 200% 200%;
+            animation: gradient-x 15s ease infinite;
+        }
+        .animate-float {
+            animation: float 10s ease-in-out infinite;
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 8s ease-in-out infinite;
+        }
+        .animate-pulse-slower {
+            animation: pulse-slower 12s ease-in-out infinite;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+        document.head.removeChild(style);
+    };
+}, []);
 
     return(
         <div className="custom-scrollbar w-full flex flex-col bg-neutral-900">
             {/* Viewport Container */}
-            <div className="min-h-screen w-full flex flex-col">
+            <div className="min-h-screen w-full flex flex-col bg-neutral-900">
                 {/* Navbar */}
                 <Navbar/>
                 
                 {/* Hero Section - Takes remaining viewport height */}
                 <div className="flex-1 flex flex-col relative overflow-hidden">
-                    <div className="absolute inset-0 z-0">
-                        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600 rounded-full filter blur-[100px] opacity-20"></div>
-                        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-blue-600 rounded-full filter blur-[120px] opacity-15"></div>
+                    {/* Animated gradient background */}
+                    <div className="absolute inset-0 z-0 overflow-hidden">
+                        {/* Subtle moving gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-purple-900/5 to-indigo-900/10 animate-gradient-x"></div>
+                        
+                        {/* Animated grid pattern */}
+                        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f10_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f10_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+                        
+                        {/* Floating particles */}
+                        <div className="absolute inset-0 animate-float">
+                            {[...Array(15)].map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="absolute w-1 h-1 bg-purple-500/30 rounded-full"
+                                    style={{
+                                        left: `${Math.random() * 100}%`,
+                                        top: `${Math.random() * 100}%`,
+                                        animationDelay: `${i * 0.5}s`,
+                                        transform: `scale(${0.5 + Math.random() * 1.5})`
+                                    }}
+                                ></div>
+                            ))}
+                        </div>
+                        
+                        {/* Your existing blobs with animation */}
+                        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600 rounded-full filter blur-[100px] opacity-20 animate-pulse-slow"></div>
+                        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-blue-600 rounded-full filter blur-[120px] opacity-15 animate-pulse-slower"></div>
                     </div>
                     
                     <div className="flex-1 flex flex-col justify-center items-center gap-6 pb-8 px-4 relative z-10">

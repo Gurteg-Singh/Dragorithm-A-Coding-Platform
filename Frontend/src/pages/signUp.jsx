@@ -37,6 +37,73 @@ export default function SignUp() {
     const {isAuthenticated, loading,error} = useSelector((state)=>state.auth);
     const navigate = useNavigate();
 
+    // Add background animation styles
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 10px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #2a2a2a;
+                border-radius: 5px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #3d3d3d;
+                border-radius: 5px;
+                border: 2px solid #2a2a2a;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #4a4a4a;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .fade-in {
+                animation: fadeIn 0.8s ease-out forwards;
+            }
+            
+            /* Background animation styles */
+            @keyframes gradient-x {
+                0%, 100% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0) rotate(0deg); }
+                50% { transform: translateY(-10px) rotate(5deg); }
+            }
+            @keyframes pulse-slow {
+                0%, 100% { opacity: 0.2; transform: scale(1); }
+                50% { opacity: 0.25; transform: scale(1.05); }
+            }
+            @keyframes pulse-slower {
+                0%, 100% { opacity: 0.15; transform: scale(1); }
+                50% { opacity: 0.2; transform: scale(1.03); }
+            }
+            .animate-gradient-x {
+                background-size: 200% 200%;
+                animation: gradient-x 15s ease infinite;
+            }
+            .animate-float {
+                animation: float 10s ease-in-out infinite;
+            }
+            .animate-pulse-slow {
+                animation: pulse-slow 8s ease-in-out infinite;
+            }
+            .animate-pulse-slower {
+                animation: pulse-slower 12s ease-in-out infinite;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
+
     useEffect(()=>{
         dispatch(clearAuthError());
     },[]);
@@ -56,10 +123,39 @@ export default function SignUp() {
     }
 
     return (
-        <div className="min-h-screen bg-neutral-900 flex flex-col">
+        <div className="min-h-screen bg-neutral-900 flex flex-col relative overflow-hidden">
+            {/* Background Animation Elements */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+                {/* Subtle moving gradient */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-purple-900/5 to-indigo-900/10 animate-gradient-x"></div>
+                
+                {/* Animated grid pattern */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f10_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f10_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+                
+                {/* Floating particles */}
+                <div className="absolute inset-0 animate-float">
+                    {[...Array(10)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="absolute w-1 h-1 bg-purple-500/20 rounded-full"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animationDelay: `${i * 0.5}s`,
+                                transform: `scale(${0.5 + Math.random() * 1})`
+                            }}
+                        ></div>
+                    ))}
+                </div>
+                
+                {/* Animated blobs */}
+                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-600 rounded-full filter blur-[100px] opacity-15 animate-pulse-slow"></div>
+                <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-blue-600 rounded-full filter blur-[120px] opacity-10 animate-pulse-slower"></div>
+            </div>
+            
             <Navbar />
             
-            <div className="flex-1 flex flex-col lg:flex-row items-center justify-center py-4">
+            <div className="flex-1 flex flex-col lg:flex-row items-center justify-center py-4 relative z-10">
                 {/* Left Side - Branding */}
                 <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4 lg:p-8">
                     <div className="max-w-lg text-center mb-6 lg:mb-0">
@@ -93,7 +189,7 @@ export default function SignUp() {
 
                 {/* Right Side - Form */}
                 <div className="w-full lg:w-1/2 flex items-center justify-center p-4">
-                    <div className="w-full max-w-md bg-neutral-800 rounded-2xl border border-neutral-700 shadow-lg overflow-hidden">
+                    <div className="w-full max-w-md bg-neutral-800/80 backdrop-blur-sm rounded-2xl border border-neutral-700 shadow-lg overflow-hidden">
                         <form onSubmit={handleSubmit(submitData)} className="p-6 space-y-4">
                             <div className="text-center mb-4">
                                 <h2 className="text-2xl font-bold text-white">Create Account</h2>
@@ -223,4 +319,3 @@ export default function SignUp() {
         </div>
     );
 }
-
